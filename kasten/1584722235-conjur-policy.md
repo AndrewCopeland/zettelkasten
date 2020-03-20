@@ -21,3 +21,4 @@ Everything within conjur can be defined as a policy. Below is an example of the 
 Anything that starts with a `!` is considered a policy statement reference. 
 
 ## Links
+- [1584721461-conjur-appliance.md](1584721461-conjur-appliance.md)
