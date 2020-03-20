@@ -9,3 +9,4 @@ You can find more documentation regarding conjur here: https://docs.conjur.org/L
 
 ## Links
 - [1584721584-conjur-authn-iam.md](1584721584-conjur-authn-iam.md)
+- [1584721724-conjur-authn-oidc.md](1584721724-conjur-authn-oidc.md)
