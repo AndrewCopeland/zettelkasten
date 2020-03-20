@@ -5,3 +5,4 @@ A conjur variable is repersented as `!variable` within a policy. A variable is a
 A user/host has the ability to retrieve the secret if it has privileges to `execute` the variable resource
 
 ## Links
+- [1584722235-conjur-policy.md](1584722235-conjur-policy.md)

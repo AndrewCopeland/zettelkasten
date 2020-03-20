@@ -22,3 +22,4 @@ Anything that starts with a `!` is considered a policy statement reference.
 
 ## Links
 - [1584721461-conjur-appliance.md](1584721461-conjur-appliance.md)
+- [1584722460-conjur-resource-variable.md](1584722460-conjur-resource-variable.md)
