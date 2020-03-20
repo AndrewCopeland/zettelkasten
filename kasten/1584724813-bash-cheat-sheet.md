@@ -3,7 +3,7 @@
 
 Get all files names within a directory
 ```bash
-find $ZETTEL_DIR  -type f -exec basename {} \;
+find './directory'  -type f -exec basename {} \;
 ```
 
 Searching for mutliple values using grep
