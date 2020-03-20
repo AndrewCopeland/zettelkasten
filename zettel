@@ -61,7 +61,7 @@ function git_push {
 }
 
 function new() {
- title="$1"
+ title="$@"
   if [[ -z "$title" ]]; then
     echo "usage: $0 create <zettel title>"
     fail "Zettel title not provided"
@@ -152,7 +152,7 @@ function main() {
   # perform zettel actions
   action=$1
   if [[ "$action" == "new" ]]; then
-    new "$2"
+    new "${@:2}"
   elif [[ "$action" == "open" ]]; then
     open "$2"
   elif [[ "$action" == "link" ]]; then
@@ -162,4 +162,5 @@ function main() {
     fail "Invalid action '$action'. Supported actions are: new, open and link"
   fi
 }
+
 main $@
