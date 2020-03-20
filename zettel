@@ -1,0 +1,165 @@
+#!/bin/bash
+set -e
+RED='\033[0;31m'
+NC='\033[0m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m' 
+
+# -- utils --
+function fail() {
+  echo -e "${RED}ERROR: $1${NC}" > /dev/tty
+  exit 1
+}
+
+function echo_green {
+	echo -e "${GREEN}${1}${NC}" > /dev/tty
+}
+
+function list_zettels {
+  set +e
+  echo "$(find $ZETTEL_DIR  -type f -exec basename {} \;)"  > /dev/tty
+  set -e
+}
+
+function find_zettel {
+  # validate search field were procided and create search fields for grep
+  search_fields="$1"
+  if [[ -z "$search_fields" ]];then
+     list_zettels
+    fail "Could not find a zettel because search fields were not provided"
+  fi
+  search_fields=$(echo "$search_fields" | sed 's/ /|/g' | sed 's/,/|/g')
+
+  # look for the zettel
+  set +e
+  zettels=$(find $ZETTEL_DIR  -type f -exec basename {} \; | grep -e "$search_fields")
+  set -e
+
+  # validate only 1 zettel was retutned
+  if [[ -z "$zettels" ]]; then
+    fail "Failed to find a zettel with search criteria '$search_fields'"
+  fi
+  number_zettels=$(echo "$zettels" | wc -l)
+  if [ "$number_zettels" -gt "1" ]; then
+    echo "$zettels" > /dev/tty
+    fail "Multiple zettle's were returned matching the search criteria."
+  fi
+
+  echo "$zettels"
+}
+
+function git_push {
+  if [[ "$ZETTEL_AUTO_GIT_PUSH" == "true" ]]; then
+    cwd=$(pwd)
+    cd "$ZETTEL_DIR"
+    echo "$1" > /dev/tty
+    git add ${@:2}
+    git commit -m "$1" --quiet
+    git push --quiet
+    cd "$cwd"
+  fi
+}
+
+function new() {
+ title="$1"
+  if [[ -z "$title" ]]; then
+    echo "usage: $0 create <zettel title>"
+    fail "Zettel title not provided"
+  fi
+  title=$(echo "$title" | sed 's/ /-/g')
+  default_tags="#exampletag"
+  now=$(date +%s)
+  zettel_title="# $now $title"
+  zettel_fname="$ZETTEL_DIR/$now-$title.md"
+
+  if [ -f "$zettel_fname" ]; then
+    fail "zettel '$zettel_fname' already exists"
+  fi
+
+  zettel_template=$(cat <<-END
+$zettel_title
+$default_tags
+
+
+
+## Links
+END
+)
+  touch "$zettel_fname"
+  echo "$zettel_template" > "$zettel_fname"
+  vi +4 "$zettel_fname"
+
+  git_push "added zettel $now-$title.md" "$zettel_fname"
+  echo_green "created zettel '$now-$title.md'"
+}
+
+function open() {
+  search_fields="$1"
+  zettel=$(find_zettel "$search_fields" || exit)
+  
+  before=$(cat "$ZETTEL_DIR/$zettel" | md5)
+  vi +4 "$ZETTEL_DIR/$zettel"
+  after=$(cat "$ZETTEL_DIR/$zettel" | md5)
+  
+  if [[ "$before" != "$after" ]]; then
+    git_push "updating zettel $zettel" "$zettel"
+    echo_green "updated '$zettel'"
+  fi
+}
+
+function link() {
+  from_link=$1
+  to_link=$2
+
+  # do validation here to give usage error message
+  # associated with the link action
+  if [[ -z "$from_link" ]]; then
+    echo "usage: $0 link 1584648495 1584648508"
+    fail "Empty from_link argument"
+  fi
+  if [[ -z "$to_link" ]]; then
+    echo "usage: $0 link 1584648495 1584648508"
+    fail "Empty to_link argument"
+  fi
+
+  from_fname=$(find_zettel "$from_link")
+  to_fname=$(find_zettel "$to_link")
+
+  echo "- [$from_fname]($from_fname)" >> "$ZETTEL_DIR/$to_fname"
+  echo "- [$to_fname]($to_fname)" >> "$ZETTEL_DIR/$from_fname"
+
+  git_push \
+    "added link between $from_fname and $to_fname" \
+    "$from_fname" \
+    "$to_fname"
+  
+  echo_green "linked zettels $to_fname <---> $from_fname"
+}
+
+function main() {
+  # mandatory env
+  if [[ -z "$ZETTEL_DIR" ]]; then
+    fail "Environment variable ZETTEL_DIR is required"
+  fi
+
+  # attempt to create zettel dir
+  if [ ! -d "$ZETTEL_DIR" ]; then
+    echo "Attempting to create '$ZETTEL_DIR' since it does not exist"
+    mkdir "$ZETTEL_DIR"
+    echo "Created zettel directory '$ZETTEL_DIR'"
+  fi
+
+  # perform zettel actions
+  action=$1
+  if [[ "$action" == "new" ]]; then
+    new "$2"
+  elif [[ "$action" == "open" ]]; then
+    open "$2"
+  elif [[ "$action" == "link" ]]; then
+    link "$2" "$3"
+  else
+    echo "usage: $0 <action>"
+    fail "Invalid action '$action'. Supported actions are: new, open and link"
+  fi
+}
+main $@
