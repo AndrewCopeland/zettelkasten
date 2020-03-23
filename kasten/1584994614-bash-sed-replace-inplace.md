@@ -3,6 +3,7 @@
 
 ```bash
 sed -i -e 's/to/from/g' <file name>
+```
 
 ## Links
 - [1584994548-bash-sed.md](1584994548-bash-sed.md)
