@@ -2,7 +2,7 @@
 #sed #bash
 
 ```bash
-sed -i -e 's/to/from/g' <file name>
+sed -i.bak 's/to/from/g' <file name>
 ```
 
 ## Links
