@@ -136,6 +136,16 @@ function link() {
   echo_green "linked zettels $to_fname <---> $from_fname"
 }
 
+function home() {
+  new_home_dir=$1
+  # if new home dir is empty then print out dir
+  if [[ -z "$new_home_dir" ]]; then
+    echo "Current Zettel directory: $ZETTEL_DIR"
+  else
+    echo "export ZETTEL_DIR=\"$new_home_dir\""
+  fi
+}
+
 function main() {
   # mandatory env
   if [[ -z "$ZETTEL_DIR" ]]; then
@@ -157,6 +167,8 @@ function main() {
     open "$2"
   elif [[ "$action" == "link" ]]; then
     link "$2" "$3"
+  elif [[ "$action" == "home" ]]; then
+    home "$2"
   else
     echo "usage: $0 <action>"
     fail "Invalid action '$action'. Supported actions are: new, open and link"
