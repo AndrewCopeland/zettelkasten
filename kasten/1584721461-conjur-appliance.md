@@ -8,8 +8,6 @@ Permissions to these secrets are determine within policy.
 You can find more documentation regarding conjur here: https://docs.conjur.org/Latest/en/Content/Resources/_TopNav/cc_Home.htm
 
 ## Links
-- [1584721584-conjur-authn-iam.md](1584721584-conjur-authn-iam.md)
-- [1584721724-conjur-authn-oidc.md](1584721724-conjur-authn-oidc.md)
 - [1584722235-conjur-policy.md](1584722235-conjur-policy.md)
 - [1584725263-conjur-enable-debug.md](1584725263-conjur-enable-debug.md)
 - [1585072449-conjur-home-authenticators.md](1585072449-conjur-home-authenticators.md)
