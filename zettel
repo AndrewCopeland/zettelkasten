@@ -146,6 +146,11 @@ function home() {
   fi
 }
 
+# perform a 'git pull' in the kasten directory
+function sync() {
+  cd $ZETTEL_DIR && git pull
+}
+
 function main() {
   # mandatory env
   if [[ -z "$ZETTEL_DIR" ]]; then
@@ -169,6 +174,8 @@ function main() {
     link "$2" "$3"
   elif [[ "$action" == "home" ]]; then
     home "$2"
+  elif [[ "$action" == "sync" ]]; then
+    sync
   else
     echo "usage: $0 <action>"
     fail "Invalid action '$action'. Supported actions are: new, open and link"
