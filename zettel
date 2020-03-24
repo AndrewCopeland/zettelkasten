@@ -48,7 +48,7 @@ function find_zettel {
   echo "$zettels"
 }
 
-function git_push {
+function git_push() {
   if [[ "$ZETTEL_AUTO_GIT_PUSH" == "true" ]]; then
     cwd=$(pwd)
     cd "$ZETTEL_DIR"
@@ -58,6 +58,13 @@ function git_push {
     git push --quiet
     cd "$cwd"
   fi
+}
+
+function remove_zettel_link() {
+  zettel="$1"
+  line_number=$(cat "$ZETTEL_DIR/$zettel" | grep -n "$zettel" | grep "-" | grep ")" | awk -F ":" '{print $1}' | head -n 1)
+  sed -i.bak "${line_number}d" "$ZETTEL_DIR/$zettel"
+  rm "$ZETTEL_DIR/$zettel.bak"
 }
 
 function new() {
@@ -113,7 +120,6 @@ function open_browser() {
 
   github_endpoint=$(cd $ZETTEL_DIR && git remote show origin | grep "Push " | awk -F ":" '{print $3}' | sed 's/.git//g')
   open -a "Google Chrome" "https://github.com/$github_endpoint/tree/master/kasten/$zettel"
-  exit 0
 }
 
 function link() {
@@ -143,6 +149,35 @@ function link() {
     "$to_fname"
   
   echo_green "linked zettels $to_fname <---> $from_fname"
+}
+
+function rm_link() {
+  from_link=$1
+  to_link=$2
+
+  # do validation here to give usage error message
+  # associated with the link action
+  if [[ -z "$from_link" ]]; then
+    echo "usage: $0 link 1584648495 1584648508"
+    fail "Empty from_link argument"
+  fi
+  if [[ -z "$to_link" ]]; then
+    echo "usage: $0 link 1584648495 1584648508"
+    fail "Empty to_link argument"
+  fi
+
+  from_fname=$(find_zettel "$from_link")
+  to_fname=$(find_zettel "$to_link")
+
+  remove_zettel_link $from_fname
+  remove_zettel_link $to_fname
+
+  git_push \
+    "remove link between $from_fname and $to_fname" \
+    "$from_fname" \
+    "$to_fname"
+
+  echo_green "removed link $to_fname <---> $from_fname"
 }
 
 function home() {
@@ -183,6 +218,8 @@ function main() {
     open_browser "$2"
   elif [[ "$action" == "link" ]]; then
     link "$2" "$3"
+  elif [[ "$action" == "rm-link" ]]; then
+    rm_link "$2" "$3"
   elif [[ "$action" == "home" ]]; then
     home "$2"
   elif [[ "$action" == "sync" ]]; then
