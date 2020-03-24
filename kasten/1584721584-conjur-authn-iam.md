@@ -3,6 +3,7 @@
 
 The conjur `authn-iam` authenticator allows the ability to authenticate using an AWS IAM role.
 
+
 ## Advantages
 - No secret zero
 - Use AWS identities to retrieve secrets from conjur
