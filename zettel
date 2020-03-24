@@ -93,7 +93,7 @@ END
   echo_green "created zettel '$now-$title.md'"
 }
 
-function open() {
+function open_vi() {
   search_fields="$1"
   zettel=$(find_zettel "$search_fields" || exit)
   
@@ -105,6 +105,15 @@ function open() {
     git_push "updating zettel $zettel" "$zettel"
     echo_green "updated '$zettel'"
   fi
+}
+
+function open_browser() {
+  search_fields="$1"
+  zettel=$(find_zettel "$search_fields" || exit)
+
+  github_endpoint=$(cd $ZETTEL_DIR && git remote show origin | grep "Push " | awk -F ":" '{print $3}' | sed 's/.git//g')
+  open -a "Google Chrome" "https://github.com/$github_endpoint/tree/master/kasten/$zettel"
+  exit 0
 }
 
 function link() {
@@ -169,7 +178,9 @@ function main() {
   if [[ "$action" == "new" ]]; then
     new "${@:2}"
   elif [[ "$action" == "open" ]]; then
-    open "$2"
+    open_vi "$2"
+  elif [[ "$action" == "open-browser" ]]; then
+    open_browser "$2"
   elif [[ "$action" == "link" ]]; then
     link "$2" "$3"
   elif [[ "$action" == "home" ]]; then
