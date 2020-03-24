@@ -12,4 +12,3 @@ The conjur `authn-iam` authenticator allows the ability to authenticate using an
 - Creation of the signed request requires code within the application
 
 ## Links
-- [1584721461-conjur-appliance.md](1584721461-conjur-appliance.md)
