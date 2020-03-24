@@ -13,3 +13,4 @@ The conjur `authn-iam` authenticator allows the ability to authenticate using an
 
 ## Links
 - [1585072449-conjur-home-authenticators.md](1585072449-conjur-home-authenticators.md)
+- [1585068641-aws-fargate-iam-authn-conjur.md](1585068641-aws-fargate-iam-authn-conjur.md)
