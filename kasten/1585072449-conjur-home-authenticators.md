@@ -3,9 +3,9 @@
 
 Conjur has the ability to authenticate with platform or cloud specific identities
 - authn: authenticate using an api key
-- authn-iam: authenticate iam roles
+- [authn-iam](1584721584-conjur-authn-iam.md): authenticate iam roles
 - authn-k8s: authenticate kubernetes resources
-- authn-oidc: authenticate an OIDC access token (JWT)
+- [authn-oidc](1584721724-conjur-authn-oidc.md): authenticate an OIDC access token (JWT)
 - authn-azure (poc): authenticate azure managed identities
 
 ## Links
