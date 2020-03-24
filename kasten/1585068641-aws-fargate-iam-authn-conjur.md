@@ -19,4 +19,3 @@ curl 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
 ```
 
 ## Links
-- [1585072449-conjur-home-authenticators.md](1585072449-conjur-home-authenticators.md)
