@@ -10,3 +10,4 @@ Conjur has the ability to authenticate with platform or cloud specific identitie
 
 ## Links
 - [1585068641-aws-fargate-iam-authn-conjur.md](1585068641-aws-fargate-iam-authn-conjur.md)
+- [1584721461-conjur-appliance.md](1584721461-conjur-appliance.md)
