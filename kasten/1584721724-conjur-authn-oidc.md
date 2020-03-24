@@ -2,6 +2,7 @@
 #exampletag
 
 The conjur `authn-oidc` authenticator allows the ability to authenticate using a JWT token.
+- [example of using okta with conjur](1585089211-conjur-okta-authentication-bash.md)
 
 ## Advantages
 - No secret zero
