@@ -12,3 +12,4 @@ The conjur `authn-oidc` authenticator allows the ability to authenticate using a
 - application code is required to interface with the OIDC provider (however most of the time this is documented well via the vendor)
 
 ## Links
+- [1585072449-conjur-home-authenticators.md](1585072449-conjur-home-authenticators.md)
