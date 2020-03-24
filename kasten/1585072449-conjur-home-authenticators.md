@@ -9,3 +9,4 @@ Conjur has the ability to authenticate with platform or cloud specific identitie
 - authn-azure (poc): authenticate azure managed identities
 
 ## Links
+- [1585068641-aws-fargate-iam-authn-conjur.md](1585068641-aws-fargate-iam-authn-conjur.md)
