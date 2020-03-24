@@ -18,6 +18,8 @@ exec into a docker container
 docker exec -it <container name> bash
 # or if bash is not on the container
 docker exec -it <container name> sh
+# exec into a container as a specific user
+docker exec -it --user <user> <container name> bash
 ```
 
 force remove a docker container
