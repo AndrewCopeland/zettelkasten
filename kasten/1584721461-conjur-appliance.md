@@ -11,3 +11,4 @@ You can find more documentation regarding conjur here: https://docs.conjur.org/L
 - [1584722235-conjur-policy.md](1584722235-conjur-policy.md)
 - [1584725263-conjur-enable-debug.md](1584725263-conjur-enable-debug.md)
 - [1585072449-conjur-home-authenticators.md](1585072449-conjur-home-authenticators.md)
+- [1585094315-conjur-create-cli.md](1585094315-conjur-create-cli.md)
