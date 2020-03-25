@@ -9,3 +9,4 @@ openssl s_client -showcerts -connect <conjur instance host name>:443 < /dev/null
 ```
 
 ## Links
+- [1585094442-add-certificate-to-java-key-store.md](1585094442-add-certificate-to-java-key-store.md)

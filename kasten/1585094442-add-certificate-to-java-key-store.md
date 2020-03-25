@@ -6,3 +6,4 @@ keytool -import -trustcacerts -alias <alias name> -keystore /Library/Java/JavaVi
 ```
 
 ## Links
+- [1585094553-get-conjur-self-signed-certificate.md](1585094553-get-conjur-self-signed-certificate.md)
