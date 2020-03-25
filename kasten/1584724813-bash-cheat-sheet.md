@@ -25,3 +25,4 @@ END
 ## Links
 - [1584994548-bash-sed.md](1584994548-bash-sed.md)
 - [1585083497-docker-cheat-sheet.md](1585083497-docker-cheat-sheet.md)
+- [1585160674-bash-openssl.md](1585160674-bash-openssl.md)
