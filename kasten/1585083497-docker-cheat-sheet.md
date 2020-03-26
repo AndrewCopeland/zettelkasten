@@ -29,7 +29,7 @@ docker rm -f <container name>
 
 an ephermeral ubuntu container
 ```bash
- docker run -it --entrypoint bash ubuntu:18.04
+docker run -it --entrypoint bash ubuntu:18.04
 ```
 
 
