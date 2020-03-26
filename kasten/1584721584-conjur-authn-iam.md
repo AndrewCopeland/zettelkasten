@@ -31,6 +31,11 @@ The conjur `authn-iam` authenticator allows the ability to authenticate using an
   member: !host team1/<aws account number>/<iam role name>
 ```
 
+Once the policy has been loaded we must enable the authenticator by execing into the conjur appliance and performing the following:
+```bash
+evoke variables set CONJUR_AUTHENTICATORS=authn,authn-iam/<service id>
+```
+
 ## Use cases
 - [Authenticating an AWS Fargate or ECS instance](1585068641-aws-fargate-iam-authn-conjur.md)
 - [Authenticating an EC2 instance](https://github.com/AndrewCopeland/conjur-iam-api-key#ec2-usage)
