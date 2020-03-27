@@ -1,0 +1,14 @@
+# 1585328995 ec2-metadata-url-token
+#aws #authn-iam
+
+To obtain the IAM role associated with this EC2 instane perform the following:
+```bash
+curl http://169.254.169.254/latest/meta-data/iam/security-credentials/
+```
+
+To obtain the access key, secret key and token for this iam user:
+```bash
+curl http://169.254.169.254/latest/meta-data/iam/security-credentials/<iam role name>
+```
+
+## Links
