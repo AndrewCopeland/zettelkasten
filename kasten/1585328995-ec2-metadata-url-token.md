@@ -1,7 +1,7 @@
 # 1585328995 ec2-metadata-url-token
 #aws #authn-iam
 
-To obtain the IAM role associated with this EC2 instane perform the following:
+To obtain the IAM role associated with this EC2 instance perform the following:
 ```bash
 curl http://169.254.169.254/latest/meta-data/iam/security-credentials/
 ```
