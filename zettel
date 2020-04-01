@@ -52,6 +52,25 @@ function find_zettel {
   echo "$zettels"
 }
 
+function echo_usage {
+  usage=$(cat <<-END
+
+Usage:	zettel COMMAND
+
+A note taking application following the Zettelkasten method.
+
+Commands:
+  new           Create a new zettel
+  open          Open an existing zettel in vi
+  open-browser  Open an existing zettel in github using Google Chome
+  link          Link 2 zettels together
+  remove-link   Remove a link between 2 zettels
+  remove        Remove a zettel
+END
+)
+  echo "$usage"
+}
+
 function git_push() {
   if [[ "$ZETTEL_AUTO_GIT_PUSH" == "true" ]]; then
     cwd=$(pwd)
@@ -206,6 +225,14 @@ function sync() {
   cd $ZETTEL_DIR && git pull
 }
 
+# remove a 1 specific zettel and make sure this is reflected in git
+function remove() {
+  search_fields="$1"
+  zettel=$(find_zettel "$search_fields" || exit)
+  rm -f "$zettel"
+  git_push "removing zettel $zettel" "$zettel"
+}
+
 function main() {
   # mandatory env
   if [[ -z "$ZETTEL_DIR" ]]; then
@@ -235,9 +262,11 @@ function main() {
     home "$2"
   elif [[ "$action" == "sync" ]]; then
     sync
+  elif [[ "$action" == "remove" ]]; then
+    remove "$2"
   else
-    echo "usage: $0 <action>"
-    fail "Invalid action '$action'. Supported actions are: new, open and link"
+    echo "Invalid action '$action' check usage below."
+    echo_usage
   fi
 }
 
