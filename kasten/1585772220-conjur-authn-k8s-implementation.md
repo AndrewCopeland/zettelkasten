@@ -56,8 +56,8 @@ are always required.
       authn-k8s/service-account: conjur-cluster
       authn-k8s/authentication-container-name: authenticator
   - !grant
-	role: !group apps
-	member: !host followers
+    role: !group apps
+    member: !host followers
 ```
 
 
