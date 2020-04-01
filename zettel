@@ -15,6 +15,10 @@ function echo_green {
 	echo -e "${GREEN}${1}${NC}" > /dev/tty
 }
 
+function echo_yellow {
+	echo -e "${YELLOW}${1}${NC}" > /dev/tty
+}
+
 function list_zettels {
   set +e
   echo "$(find $ZETTEL_DIR  -type f -exec basename {} \;)"  > /dev/tty
@@ -94,10 +98,17 @@ END
 )
   touch "$zettel_fname"
   echo "$zettel_template" > "$zettel_fname"
+  before=$(cat "$zettel_fname" | md5)
   vi +4 "$zettel_fname"
+  after=$(cat "$zettel_fname" | md5)
 
-  git_push "added zettel $now-$title.md" "$zettel_fname"
-  echo_green "created zettel '$now-$title.md'"
+  if [[ "$before" != "$after" ]]; then
+    git_push "added zettel $now-$title.md" "$zettel_fname"
+    echo_green "created zettel '$now-$title.md'"
+  else
+    rm -f $zettel_fname
+    echo_yellow "WARNING: Zettel was not created since the contents are empty"
+  fi
 }
 
 function open_vi() {
