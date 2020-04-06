@@ -13,9 +13,9 @@ The following policy will beed to be loaded to configure conjur to use the authn
   - !webservice
   - !groups apps
   - !permit
-	role: !group apps
-	resource: !webservice
-	privileges: [ read, authenticate ]
+    role: !group apps
+    resource: !webservice
+    privileges: [ read, authenticate ]
 ```
 
 ## Loading policy for followers => masters
@@ -43,10 +43,10 @@ are always required.
   - !webservice
   # Any member of this group will be able to use this k8s authenticator
   - !group apps
-  - !permit
-	role: !group apps
-	resource: !webservice
-	privieleges: [ authenticate ]
+  - !permit:
+    role: !group apps
+    resource: !webservice
+    privieleges: [ authenticate ]
 
   # This hosts is needed for followers running in k8s to access the seed fetcher service
   - !host
@@ -54,10 +54,10 @@ are always required.
     annotations:
       authn-k8s/namespace: <dap follower namespace>
       authn-k8s/service-account: conjur-cluster
-	  authn-k8s/authentication-container-name: authenticator
+      authn-k8s/authentication-container-name: authenticator
   - !grant
-	role: !group apps
-	member: !host followers
+    role: !group apps
+    member: !host followers
 ```
 
 
