@@ -62,6 +62,7 @@ A note taking application following the Zettelkasten method.
 Commands:
   new           Create a new zettel
   open          Open an existing zettel in vi
+  open-code     Open an existing zettel in Visual Studio Code
   open-browser  Open an existing zettel in github using Google Chome
   link          Link 2 zettels together
   remove-link   Remove a link between 2 zettels
@@ -136,6 +137,20 @@ function open_vi() {
   
   before=$(cat "$ZETTEL_DIR/$zettel" | md5)
   vi +4 "$ZETTEL_DIR/$zettel"
+  after=$(cat "$ZETTEL_DIR/$zettel" | md5)
+  
+  if [[ "$before" != "$after" ]]; then
+    git_push "updating zettel $zettel" "$zettel"
+    echo_green "updated '$zettel'"
+  fi
+}
+
+function open_visual_code() {
+  search_fields="$1"
+  zettel=$(find_zettel "$search_fields" || exit)
+  
+  before=$(cat "$ZETTEL_DIR/$zettel" | md5)
+  code --new-window --wait "$ZETTEL_DIR/$zettel"
   after=$(cat "$ZETTEL_DIR/$zettel" | md5)
   
   if [[ "$before" != "$after" ]]; then
@@ -254,6 +269,8 @@ function main() {
     open_vi "$2"
   elif [[ "$action" == "open-browser" ]]; then
     open_browser "$2"
+  elif [[ "$action" == "open-code" ]]; then
+    open_visual_code "$2"
   elif [[ "$action" == "link" ]]; then
     link "$2" "$3"
   elif [[ "$action" == "rm-link" ]]; then
