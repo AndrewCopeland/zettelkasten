@@ -1,7 +1,7 @@
 # 1586189434 conjur-summon-ansible-implementation
 #conjur #summon #integration
 
-1. Generate the Host and API Key load by executing `conjur policy load root host_file_name.yml`
+1. Generate the Host and API Key. Load by executing `conjur policy load root host_file_name.yml`
 ```yaml
 ---
 - !host <host identity>
@@ -12,7 +12,7 @@
   member: !host <host identity>
 ```
 
-2. On the ansible host create /etc/conjur.conf with the following content:
+2. On the ansible host create `/etc/conjur.conf` with the following content:
 ```yaml
 ---
 account: <conjur account>
@@ -20,7 +20,7 @@ plugins: []
 appliance_url: https://<conjur appliance url>/
 ```
 
-3. On the ansible host create $HOME/.netrc
+3. On the ansible host create `$HOME/.netrc`
 ```
 machine https://conjur-master/authn
   login host/<host identity in step #1>
@@ -49,7 +49,7 @@ DB_USERNAME: !var db/postgres/username
 DB_PASSWORD: !var db/postgres/password
 ```
 
-7. Test summon by executing (this should print out the 3 values mentioned in the secrets.yml):
+7. Test summon by executing (this should print out the 3 values mentioned in the `secrets.yml`):
 ```bash
 summon -f "<path to secrets.yml>/secrets.yml" env
 ```
