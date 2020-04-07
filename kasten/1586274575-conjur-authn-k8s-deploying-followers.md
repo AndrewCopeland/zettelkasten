@@ -170,5 +170,32 @@ docker exec <dap master continaer name> \
     evoke variable set CONJUR_AUTHENTICATORS "authn,authn-k8s/<authenticator name>"
 ```
 
+No everthing on the conjur side is configured its time ot focus on the k8s deployment. We have a git repo to help with this process:
+
+```bash
+git clone https://github.com/cyberark/kubernetes-conjur-deploy.git
+```
+
+Open the bootstrap.env file and modify the values to correspond with your specific k8s cluster, it should look something like:
+```bash
+export DOCKER_REGISTRY_PATH=openshift.myorg.com
+export CONJUR_VERSION=5
+export CONJUR_APPLIANCE_IMAGE=cyberark/conjur-appliance:10.9
+export CONJUR_FOLLOWER_COUNT=2
+export CONJUR_NAMESPACE_NAME=dap-follower
+export PLATFORM=kubernetes
+export OSHIFT_CLUSTER_ADMIN_USERNAME=cluster-admin
+export OSHIFT_CONJUR_ADMIN_USERNAME=cluster-admin
+export AUTHENTICATOR_ID=staging
+export CONJUR_APPLIANCE_URL=https://conjur.myorg.com
+export CONJUR_ACCOUNT=myorg
+export FOLLOWER_SEED="$CONJUR_APPLIANCE_URL/configuration/$CONJUR_ACCOUNT/seed/follower"
+export STOP_RUNNING_ENV="false"
+```
+We can start the deployment by running:
+```bash
+./start
+```
+
 ## Links
 - [1586274452-conjur-authn-k8s.md](1586274452-conjur-authn-k8s.md)
