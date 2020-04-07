@@ -6,3 +6,4 @@ Conjur offers the abilityu to authenticate specific k8s resources.
 - Deploying applications withins k8s
 
 ## Links
+- [1586274575-conjur-authn-k8s-deploying-followers.md](1586274575-conjur-authn-k8s-deploying-followers.md)
