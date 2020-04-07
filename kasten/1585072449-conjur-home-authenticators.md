@@ -13,3 +13,4 @@ Conjur has the ability to authenticate with platform or cloud specific identitie
 - [1584721584-conjur-authn-iam.md](1584721584-conjur-authn-iam.md)
 - [1584721724-conjur-authn-oidc.md](1584721724-conjur-authn-oidc.md)
 - [1585155574-conjur-authn-azure-implementation.md](1585155574-conjur-authn-azure-implementation.md)
+- [1586274452-conjur-authn-k8s.md](1586274452-conjur-authn-k8s.md)
