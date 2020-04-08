@@ -263,28 +263,48 @@ function main() {
 
   # perform zettel actions
   action=$1
-  if [ "$action" = "new" ]; then
-    new "${@:2}"
-  elif [ "$action" = "open" ]; then
-    open_vi "$2"
-  elif [ "$action" = "open-browser" ]; then
-    open_browser "$2"
-  elif [ "$action" = "open-code" ]; then
-    open_visual_code "$2"
-  elif [ "$action" = "link" ]; then
-    link "$2" "$3"
-  elif [ "$action" = "rm-link" ]; then
-    rm_link "$2" "$3"
-  elif [ "$action" = "home" ]; then
-    home "$2"
-  elif [ "$action" = "sync" ]; then
-    sync
-  elif [ "$action" = "remove" ]; then
-    remove "$2"
-  else
-    echo "Invalid action '$action' check usage below."
-    echo_usage
-  fi
+  case $action in
+    "new" | "n")
+      new "${@:2}"
+      ;;
+
+    "open-vi" | "open" | "ov" | "o")
+      open_vi "$2"
+      ;;
+
+    "open-browser" | "ob")
+      open_browser "$2"
+      ;;
+
+    "open-code" | "oc")
+      open_visual_code "$2"
+      ;;
+
+    "link" | "l")
+      link "$2" "$3"
+      ;;
+
+    "remove-link" | "rm-link" | "rml")
+      rm_link "$2" "$3"
+      ;;
+
+    "remove"  | "rm")
+      remove "$2"
+      ;;
+
+    "home")
+      home "$2"
+      ;;
+
+    "sync" | "s")
+      sync
+      ;;
+
+    *)
+      echo "Invalid action '$action' check usage below."
+      echo_usage
+      ;;
+  esac
 }
 
 main $@
