@@ -69,6 +69,7 @@ curl -i -X POST \
      --data 'name=conjurApi' \
      --data 'url=https://conjur-master'
 
+# setup the routes for the conjur service
 curl -i -X POST \
      --url http://kong:8001/services/conjurApi/routes \
      --data 'hosts[]=conjur' \
@@ -76,9 +77,8 @@ curl -i -X POST \
      --data 'strip_path=false' \
      --data 'methods[]=GET'
 
-curl -i -X GET \
-     --url http://kong:8000/info \
-     --header 'Host: conjur'
+# try to make a request to the info endpoint
+curl -i -X GET --url http://kong:8000/info --header 'Host: conjur'
 ```
 
 ## Links
