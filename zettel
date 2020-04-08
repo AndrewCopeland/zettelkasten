@@ -65,7 +65,7 @@ Commands:
   open-code     Open an existing zettel in Visual Studio Code
   open-browser  Open an existing zettel in github using Google Chome
   link          Link 2 zettels together
-  remove-link   Remove a link between 2 zettels
+  rm-link   Remove a link between 2 zettels
   remove        Remove a zettel
 END
 )
@@ -263,23 +263,23 @@ function main() {
 
   # perform zettel actions
   action=$1
-  if [[ "$action" == "new" ]]; then
+  if [ "$action" = "new" ]; then
     new "${@:2}"
-  elif [[ "$action" == "open" ]]; then
+  elif [ "$action" = "open" ]; then
     open_vi "$2"
-  elif [[ "$action" == "open-browser" ]]; then
+  elif [ "$action" = "open-browser" ]; then
     open_browser "$2"
-  elif [[ "$action" == "open-code" ]]; then
+  elif [ "$action" = "open-code" ]; then
     open_visual_code "$2"
-  elif [[ "$action" == "link" ]]; then
+  elif [ "$action" = "link" ]; then
     link "$2" "$3"
-  elif [[ "$action" == "rm-link" ]]; then
+  elif [ "$action" = "rm-link" ]; then
     rm_link "$2" "$3"
-  elif [[ "$action" == "home" ]]; then
+  elif [ "$action" = "home" ]; then
     home "$2"
-  elif [[ "$action" == "sync" ]]; then
+  elif [ "$action" = "sync" ]; then
     sync
-  elif [[ "$action" == "remove" ]]; then
+  elif [ "$action" = "remove" ]; then
     remove "$2"
   else
     echo "Invalid action '$action' check usage below."
