@@ -23,6 +23,8 @@ docker run -d --name kong-database \
                -p 9042:9042 \
                cassandra:3
 
+sleep 10
+
 # bootstrap kong
 docker run --rm \
      --network kong-net \
