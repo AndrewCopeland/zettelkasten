@@ -72,6 +72,21 @@ END
   echo "$usage"
 }
 
+function new_zettel_default() {
+  zettel_title="$1"
+  default_tags="#exampletag"
+  zettel_template=$(cat <<-END
+$zettel_title
+$default_tags
+
+
+
+## Links
+END
+)
+  echo "$zettel_template"
+}
+
 function git_push() {
   if [[ "$ZETTEL_AUTO_GIT_PUSH" == "true" ]]; then
     cwd=$(pwd)
@@ -92,36 +107,27 @@ function remove_zettel_link() {
 }
 
 function new() {
- title="$@"
+  title="$@"
   if [[ -z "$title" ]]; then
     echo "usage: $0 create <zettel title>"
     fail "Zettel title not provided"
   fi
+
   title=$(echo "$title" | sed 's/ /-/g')
   default_tags="#exampletag"
   now=$(date +%s)
   zettel_title="# $now $title"
   zettel_fname="$ZETTEL_DIR/$now-$title.md"
-
   if [ -f "$zettel_fname" ]; then
     fail "zettel '$zettel_fname' already exists"
   fi
 
-  zettel_template=$(cat <<-END
-$zettel_title
-$default_tags
-
-
-
-## Links
-END
-)
+  zettel_template="$(new_zettel_default $zettel_title)"
   touch "$zettel_fname"
   echo "$zettel_template" > "$zettel_fname"
   before=$(cat "$zettel_fname" | md5)
   vi +4 "$zettel_fname"
   after=$(cat "$zettel_fname" | md5)
-
   if [[ "$before" != "$after" ]]; then
     git_push "added zettel $now-$title.md" "$zettel_fname"
     echo_green "created zettel '$now-$title.md'"
@@ -264,8 +270,12 @@ function main() {
   # perform zettel actions
   action=$1
   case $action in
-    "new" | "n")
+    "new-vi" | "new" | "n")
       new "${@:2}"
+      ;;
+    
+    "new-code" | "nc")
+      new_visual_code "${@:2}"
       ;;
 
     "open-vi" | "open" | "ov" | "o")
