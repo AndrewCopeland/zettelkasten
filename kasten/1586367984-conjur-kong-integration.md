@@ -56,6 +56,9 @@ docker run -d --name client --network kong-net  --entrypoint "" ubuntu:latest sl
 
 # from the client
 docker exec -it client bash
+apt update -y
+apt install curl -y
+apt install jq -y
 # validate kong is running
 curl -i http://kong:8001/
 
