@@ -62,7 +62,7 @@ curl -i http://kong:8001/
 curl -i -X POST \
      --url http://kong:8001/services/ \
      --data 'name=conjurApi' \
-     --data 'url=https://conjur'
+     --data 'url=https://conjur-master'
 
 curl -i -X POST \
      --url http://kong:8001/services/conjurApi/routes \
