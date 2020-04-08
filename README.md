@@ -7,7 +7,6 @@ Before you start using the `zettel` script you will need to set the following en
 - `ZETTEL_AUTO_GIT_PUSH`(optional): If this is set to `true` then zettels will sync to the git associated with the `ZETTEL_DIR`
 
 ## Usage
-Example of the help menu:
 ```
 Usage:	zettel COMMAND
 
@@ -21,6 +20,7 @@ Commands:
   rm, remove        Remove a zettel
   l, link           Link 2 zettels together
   rml, rm-link      Remove a link between 2 zettels
+  s, sync           Sync git zettelkasten to local zettelkasten
   home              Display zettelkasten home directory
 ```
 
