@@ -7,6 +7,23 @@ Before you start using the `zettel` script you will need to set the following en
 - `ZETTEL_AUTO_GIT_PUSH`(optional): If this is set to `true` then zettels will sync to the git associated with the `ZETTEL_DIR`
 
 ## Usage
+Example of the help menu:
+```
+Usage:	zettel COMMAND
+
+A note taking application following the Zettelkasten method.
+
+Commands:
+  n, new            Create a new zettel
+  o, open           Open an existing zettel in vi
+  oc, open-code     Open an existing zettel in Visual Studio Code
+  ob, open-browser  Open an existing zettel in github using Google Chome
+  rm, remove        Remove a zettel
+  l, link           Link 2 zettels together
+  rml, rm-link      Remove a link between 2 zettels
+  home              Display zettelkasten home directory
+```
+
 To create a zettel perform the following. This will open up vi and once you are done save the zettel will be created.
 ```bash
 zettel new "my first zettel"
