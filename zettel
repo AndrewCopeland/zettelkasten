@@ -67,6 +67,7 @@ Commands:
   rm, remove        Remove a zettel
   l, link           Link 2 zettels together
   rml, rm-link      Remove a link between 2 zettels
+  s, sync           Sync git zettelkasten to local zettelkasten
   home              Display zettelkasten home directory
 END
 )
