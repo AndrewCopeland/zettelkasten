@@ -124,7 +124,7 @@ function new() {
     fail "zettel '$zettel_fname' already exists"
   fi
 
-  zettel_template="$(new_zettel_default $zettel_title)"
+  zettel_template=$(new_zettel_default "$zettel_title")
   touch "$zettel_fname"
   echo "$zettel_template" > "$zettel_fname"
   before=$(cat "$zettel_fname" | md5)
@@ -252,7 +252,7 @@ function sync() {
 function remove() {
   search_fields="$1"
   zettel=$(find_zettel "$search_fields" || exit)
-  rm -f "$zettel"
+  rm -f "$ZETTEL_DIR/$zettel"
   git_push "removing zettel $zettel" "$zettel"
 }
 
