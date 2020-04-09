@@ -4,6 +4,8 @@ RED='\033[0;31m'
 NC='\033[0m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m' 
+zk_config="$HOME/.zettelkasten"
+
 
 # -- utils --
 function fail() {
@@ -21,7 +23,7 @@ function echo_yellow {
 
 function list_zettels {
   set +e
-  echo "$(find $ZETTEL_DIR  -type f -exec basename {} \;)"  > /dev/tty
+  echo "$(find $ZETTELKASTEN_DIR  -type f -exec basename {} \;)"  > /dev/tty
   set -e
 }
 
@@ -36,7 +38,7 @@ function find_zettel {
 
   # look for the zettel
   set +e
-  zettels=$(find $ZETTEL_DIR  -type f -exec basename {} \; | grep -e "$search_fields")
+  zettels=$(find $ZETTELKASTEN_DIR  -type f -exec basename {} \; | grep -e "$search_fields")
   set -e
 
   # validate only 1 zettel was retutned
@@ -90,9 +92,9 @@ END
 }
 
 function git_push() {
-  if [[ "$ZETTEL_AUTO_GIT_PUSH" == "true" ]]; then
+  if [[ "$ZETTELKASTEN_AUTO_GIT_PUSH" == "yes" ]]; then
     cwd=$(pwd)
-    cd "$ZETTEL_DIR"
+    cd "$ZETTELKASTEN_DIR"
     echo "$1" > /dev/tty
     git add ${@:2}
     git commit -m "$1" --quiet
@@ -103,9 +105,9 @@ function git_push() {
 
 function remove_zettel_link() {
   zettel="$1"
-  line_number=$(cat "$ZETTEL_DIR/$zettel" | grep -n "$zettel" | grep "-" | grep ")" | awk -F ":" '{print $1}' | head -n 1)
-  sed -i.bak "${line_number}d" "$ZETTEL_DIR/$zettel"
-  rm "$ZETTEL_DIR/$zettel.bak"
+  line_number=$(cat "$ZETTELKASTEN_DIR/$zettel" | grep -n "$zettel" | grep "-" | grep ")" | awk -F ":" '{print $1}' | head -n 1)
+  sed -i.bak "${line_number}d" "$ZETTELKASTEN_DIR/$zettel"
+  rm "$ZETTELKASTEN_DIR/$zettel.bak"
 }
 
 function new() {
@@ -119,7 +121,7 @@ function new() {
   default_tags="#exampletag"
   now=$(date +%s)
   zettel_title="# $now $title"
-  zettel_fname="$ZETTEL_DIR/$now-$title.md"
+  zettel_fname="$ZETTELKASTEN_DIR/$now-$title.md"
   if [ -f "$zettel_fname" ]; then
     fail "zettel '$zettel_fname' already exists"
   fi
@@ -143,9 +145,9 @@ function open_vi() {
   search_fields="$1"
   zettel=$(find_zettel "$search_fields" || exit)
   
-  before=$(cat "$ZETTEL_DIR/$zettel" | md5)
-  vi +4 "$ZETTEL_DIR/$zettel"
-  after=$(cat "$ZETTEL_DIR/$zettel" | md5)
+  before=$(cat "$ZETTELKASTEN_DIR/$zettel" | md5)
+  vi +4 "$ZETTELKASTEN_DIR/$zettel"
+  after=$(cat "$ZETTELKASTEN_DIR/$zettel" | md5)
   
   if [[ "$before" != "$after" ]]; then
     git_push "updating zettel $zettel" "$zettel"
@@ -157,9 +159,9 @@ function open_visual_code() {
   search_fields="$1"
   zettel=$(find_zettel "$search_fields" || exit)
   
-  before=$(cat "$ZETTEL_DIR/$zettel" | md5)
-  code --new-window --wait "$ZETTEL_DIR/$zettel"
-  after=$(cat "$ZETTEL_DIR/$zettel" | md5)
+  before=$(cat "$ZETTELKASTEN_DIR/$zettel" | md5)
+  code --new-window --wait "$ZETTELKASTEN_DIR/$zettel"
+  after=$(cat "$ZETTELKASTEN_DIR/$zettel" | md5)
   
   if [[ "$before" != "$after" ]]; then
     git_push "updating zettel $zettel" "$zettel"
@@ -171,8 +173,8 @@ function open_browser() {
   search_fields="$1"
   zettel=$(find_zettel "$search_fields" || exit)
 
-  github_endpoint=$(cd $ZETTEL_DIR && git remote show origin | grep "Push " | awk -F ":" '{print $3}' | sed 's/.git//g')
-  open -a "Google Chrome" "https://github.com/$github_endpoint/tree/master/kasten/$zettel"
+  github_endpoint=$(cd $ZETTELKASTEN_DIR && git remote show origin | grep "Push " | awk -F ":" '{print $3}' | sed 's/.git//g')
+  open -a "Google Chrome" "https://github.com/$github_endpoint/tree/master/$ZETTELKASTEN_GIT_DIR/$zettel"
 }
 
 function link() {
@@ -193,8 +195,8 @@ function link() {
   from_fname=$(find_zettel "$from_link")
   to_fname=$(find_zettel "$to_link")
 
-  echo "- [$from_fname]($from_fname)" >> "$ZETTEL_DIR/$to_fname"
-  echo "- [$to_fname]($to_fname)" >> "$ZETTEL_DIR/$from_fname"
+  echo "- [$from_fname]($from_fname)" >> "$ZETTELKASTEN_DIR/$to_fname"
+  echo "- [$to_fname]($to_fname)" >> "$ZETTELKASTEN_DIR/$from_fname"
 
   git_push \
     "added link between $from_fname and $to_fname" \
@@ -237,16 +239,37 @@ function home() {
   new_home_dir=$1
   # if new home dir is empty then print out dir
   if [[ -z "$new_home_dir" ]]; then
-    echo "Current Zettel directory: $ZETTEL_DIR"
+    echo "Current Zettel directory: $ZETTELKASTEN_DIR"
   else
     echo "export ZETTEL_DIR=\"$new_home_dir\""
   fi
 }
 
+function init() {
+  read -p "Zettelkasten Directory: " zk_dir
+  read -p "Zettelkasten auto git push[yes/no]: " zk_auto_git_push
+  read -p "Zettelkasten git directory(optional): " zk_git_dir
+
+  if [ ! -d "${zk_dir}" ]; then
+    fail "Directory '${zk_dir}' does not exist"
+  fi 
+
+  zk_auto_git_push=$(echo $zk_auto_git_push | tr '[:upper:]' '[:lower:]')
+  if [[ "${zk_auto_git_push}" != "yes" ]]; then
+    zk_auto_git_push="no"
+  fi
+
+  rm -f "${zk_config}"
+  echo "ZETTELKASTEN_DIR=${zk_dir}" >> "${zk_config}"
+  echo "ZETTELKASTEN_AUTO_GIT_PUSH=${zk_auto_git_push}" >> "${zk_config}"
+  echo "ZETTELKASTEN_GIT_DIR=${zk_git_dir}" >> "${zk_config}"
+  echo "Initialized  '${zk_config}'"
+}
+
 # perform a 'git pull' in the kasten directory
 function sync() {
-  if [[ "$ZETTEL_AUTO_GIT_PUSH" == "true" ]]; then
-    cd $ZETTEL_DIR && git pull
+  if [[ "$ZETTELKASTEN_AUTO_GIT_PUSH" == "yes" ]]; then
+    cd $ZETTELKASTEN_DIR && git pull
   fi
 }
 
@@ -254,25 +277,28 @@ function sync() {
 function remove() {
   search_fields="$1"
   zettel=$(find_zettel "$search_fields" || exit)
-  rm -f "$ZETTEL_DIR/$zettel"
+  rm -f "$ZETTELKASTEN_DIR/$zettel"
   git_push "removing zettel $zettel" "$zettel"
 }
 
 function main() {
   # mandatory env
-  if [[ -z "$ZETTEL_DIR" ]]; then
-    fail "Environment variable ZETTEL_DIR is required"
+  if [ ! -f "${zk_config}" ]; then
+    echo "'${zk_config}' could not be found"
+    init
   fi
 
+  source "${zk_config}"
+
   # attempt to create zettel dir
-  if [ ! -d "$ZETTEL_DIR" ]; then
-    echo "Attempting to create '$ZETTEL_DIR' since it does not exist"
-    mkdir "$ZETTEL_DIR"
-    echo "Created zettel directory '$ZETTEL_DIR'"
+  if [ ! -d "$ZETTELKASTEN_DIR" ]; then
+    echo "Attempting to create '$ZETTELKASTEN_DIR' since it does not exist"
+    mkdir "$ZETTELKASTEN_DIR"
+    echo "Created zettel directory '$ZETTELKASTEN_DIR'"
   fi
 
   # perform zettel actions
-  sync
+  sync &>/dev/null
   action=$1
   case $action in
     "new-vi" | "new" | "n")
@@ -313,6 +339,10 @@ function main() {
 
     "sync" | "s")
       sync
+      ;;
+    
+    "init")
+      init
       ;;
 
     *)
