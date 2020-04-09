@@ -7,3 +7,4 @@ RESTCLIENT_LOG=stdout conjur <command goes here>
 ```
 
 ## Links
+- [1585094315-conjur-create-cli.md](1585094315-conjur-create-cli.md)
