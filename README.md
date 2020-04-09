@@ -3,7 +3,7 @@ Creating notes with the zettelkasten note taking method and storing all notes on
 
 ## Installation
 ```bash
-curl -s -o /usr/local/bin/zk https://raw.githubusercontent.com/AndrewCopeland/zettelkasten/master/zk
+curl -s -o /usr/local/bin/zk https://raw.githubusercontent.com/AndrewCopeland/zettelkasten/master/zk && chmod +x /usr/local/bin/zk
 ```
 
 ## Getting started
