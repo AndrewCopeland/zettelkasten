@@ -245,7 +245,9 @@ function home() {
 
 # perform a 'git pull' in the kasten directory
 function sync() {
-  cd $ZETTEL_DIR && git pull
+  if [[ "$ZETTEL_AUTO_GIT_PUSH" == "true" ]]; then
+    cd $ZETTEL_DIR && git pull
+  fi
 }
 
 # remove a 1 specific zettel and make sure this is reflected in git
@@ -270,6 +272,7 @@ function main() {
   fi
 
   # perform zettel actions
+  sync
   action=$1
   case $action in
     "new-vi" | "new" | "n")
