@@ -27,7 +27,7 @@ The conjur `authn-iam` authenticator allows the ability to authenticate using an
 # an example of a host that will authenticate using an IAM role
 - !host team1/<aws account number>/<iam role name>
 - !grant
-  role: !group conjur/authn-iam/<service id>
+  role: !group conjur/authn-iam/<service id>/apps
   member: !host team1/<aws account number>/<iam role name>
 ```
 
