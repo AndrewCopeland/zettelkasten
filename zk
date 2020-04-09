@@ -71,6 +71,7 @@ Commands:
   rml, rm-link      Remove a link between 2 zettels
   s, sync           Sync git zettelkasten to local zettelkasten
   home              Display zettelkasten home directory
+  init              Initialize the $HOME/.zettelkasten
 END
 )
   echo "$usage"
@@ -287,7 +288,6 @@ function main() {
     echo "'${zk_config}' could not be found"
     init
   fi
-
   source "${zk_config}"
 
   # attempt to create zettel dir
