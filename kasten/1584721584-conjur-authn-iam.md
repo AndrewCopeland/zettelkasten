@@ -47,3 +47,4 @@ evoke variables set CONJUR_AUTHENTICATORS=authn,authn-iam/<service id>
 - [1585068641-aws-fargate-iam-authn-conjur.md](1585068641-aws-fargate-iam-authn-conjur.md)
 - [1585328995-ec2-metadata-url-token.md](1585328995-ec2-metadata-url-token.md)
 - [1585603925-lambda-access-key-environment-vars.md](1585603925-lambda-access-key-environment-vars.md)
+- [1586469583-aws-eks-iam-roles-with-service-accounts.md](1586469583-aws-eks-iam-roles-with-service-accounts.md)
