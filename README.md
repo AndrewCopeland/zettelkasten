@@ -31,6 +31,7 @@ Commands:
   oc, open-code     Open an existing zettel in Visual Studio Code
   ob, open-browser  Open an existing zettel in github using Google Chome
   t, tag            Search zettels for a specific tag
+  s, search         Search zettels for a sub string
   rm, remove        Remove a zettel
   l, link           Link 2 zettels together
   rml, rm-link      Remove a link between 2 zettels

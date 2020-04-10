@@ -67,6 +67,7 @@ Commands:
   oc, open-code     Open an existing zettel in Visual Studio Code
   ob, open-browser  Open an existing zettel in github using Google Chome
   t, tag            Search zettels for a specific tag
+  s, search         Search for a sub string within all zettels
   rm, remove        Remove a zettel
   l, link           Link 2 zettels together
   rml, rm-link      Remove a link between 2 zettels
@@ -288,7 +289,12 @@ function remove() {
 function find_tag() {
   tag="${1}"
   tag="#${tag} "
-  basename -- $(grep -rnwl "$ZETTELKASTEN_DIR" -e '#conjur ')
+  search_content "${tag}"
+}
+
+function search_content() {
+  sub_string="${1}"
+  basename -- $(grep -rnl "$ZETTELKASTEN_DIR" -e "${sub_string}")
 }
 
 function main() {
@@ -344,6 +350,10 @@ function main() {
 
     "tag" | "t")
       find_tag "$2"
+      ;;
+
+    "search"| "s")
+      search_content "${2}"
       ;;
 
     "home")
