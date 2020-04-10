@@ -57,7 +57,7 @@ function find_zettel {
 function echo_usage {
   usage=$(cat <<-END
 
-Usage:	zettel COMMAND
+Usage:	zk COMMAND
 
 A note taking application following the Zettelkasten method.
 

@@ -21,7 +21,7 @@ If you need to re-initialize the config run `zk init`.
 
 ## Usage
 ```
-Usage:	zettel COMMAND
+Usage:	zk COMMAND
 
 A note taking application following the Zettelkasten method.
 
