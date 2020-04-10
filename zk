@@ -106,7 +106,9 @@ function git_push() {
 
 function remove_zettel_link() {
   zettel="$1"
-  line_number=$(cat "$ZETTELKASTEN_DIR/$zettel" | grep -n "$zettel" | grep "-" | grep ")" | awk -F ":" '{print $1}' | head -n 1)
+  link="$2"
+  link="\- \[$link\]($link)"
+  line_number=$(cat "$ZETTELKASTEN_DIR/$zettel" | grep -n "$link" | awk -F ':' '{print $1}' | head -n 1)
   sed -i.bak "${line_number}d" "$ZETTELKASTEN_DIR/$zettel"
   rm "$ZETTELKASTEN_DIR/$zettel.bak"
 }
@@ -225,8 +227,8 @@ function rm_link() {
   from_fname=$(find_zettel "$from_link")
   to_fname=$(find_zettel "$to_link")
 
-  remove_zettel_link $from_fname
-  remove_zettel_link $to_fname
+  remove_zettel_link $from_fname $to_fname
+  remove_zettel_link $to_fname $from_fname
 
   git_push \
     "remove link between $from_fname and $to_fname" \
