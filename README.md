@@ -7,10 +7,17 @@ curl -s -o /usr/local/bin/zk https://raw.githubusercontent.com/AndrewCopeland/ze
 ```
 
 ## Getting started
-Before you start using the `zk` script you will need to set the following environment variables:
-- `ZETTELKASTEN_DIR`: The directory in which the zettels will be stored. In this case it is `$(pwd)/kasten`
-- `ZETTELKASTEN_AUTO_GIT_PUSH`(optional): If this is set to `true` then zettels will sync to the git associated with the `ZETTELKASTEN_DIR`
-- `ZETTELKASTEN_GIT_DIR`(optional): If we are creating Zettelkastens within a specific directory in the git repo. 
+To initialize the zettelkasten config just run `zk`.
+```bash
+copeland:zettelkasten acopeland$ zk
+'/Users/acopeland/.zettelkasten' could not be found
+Zettelkasten Directory: /Users/acopeland/git/AndrewCopeland/zettelkasten/kasten
+Zettelkasten auto git push[yes/no]: yes
+Zettelkasten git directory(optional):
+Initialized  '/Users/acopeland/.zettelkasten'
+copeland:zettelkasten acopeland$
+```
+If you need to re-initialize the config run `zk init`.
 
 ## Usage
 ```
