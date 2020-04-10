@@ -52,3 +52,8 @@ To link zettels together perform the following. This performs a search just like
 ```bash
 zettel link my-first-zettel my-second-zettel
 ```
+
+## Limitations
+- Currently only tested on Mac
+- Google Chrome and Visual Code must be installed to use `open-code` or `open-browser`
+- When `ZETTELKASTEN_AUTO_GIT_PUSH=yes` then `ZETTELKASTEN_DIR` must be a git repo.
