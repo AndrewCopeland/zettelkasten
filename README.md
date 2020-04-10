@@ -52,16 +52,3 @@ To link zettels together perform the following. This performs a search just like
 ```bash
 zettel link my-first-zettel my-second-zettel
 ```
-
-## How was the example zettelkasten created
-```bash
-./zettel new conjur-appliance
-./zettel new conjur-authn-iam
-./zettel link conjur-appliance conjur-authn-iam
-./zettel new conjur-authn-oidc
-./zettel link conjur-appliance conjur-authn-oidc
-./zettel new conjur-policy
-./zettel link conjur-appliance conjur-policy
-./zettel new conjur-resource-variable
-./zettel link conjur-policy conjur-resource-variable
-```
