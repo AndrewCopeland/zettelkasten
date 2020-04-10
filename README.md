@@ -13,7 +13,7 @@ copeland:zettelkasten acopeland$ zk
 '/Users/acopeland/.zettelkasten' could not be found
 Zettelkasten Directory: /Users/acopeland/git/AndrewCopeland/zettelkasten/kasten
 Zettelkasten auto git push[yes/no]: yes
-Zettelkasten git directory(optional):
+Zettelkasten git directory(optional): kasten
 Initialized  '/Users/acopeland/.zettelkasten'
 copeland:zettelkasten acopeland$
 ```
