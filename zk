@@ -68,6 +68,7 @@ Commands:
   ob, open-browser  Open an existing zettel in github using Google Chome
   t, tag            Search zettels for a specific tag
   s, search         Search for a sub string within all zettels
+  ls, list          List all zettels
   rm, remove        Remove a zettel
   l, link           Link 2 zettels together
   rml, rm-link      Remove a link between 2 zettels
@@ -297,6 +298,12 @@ function search_content() {
   basename -- $(grep -rnl "$ZETTELKASTEN_DIR" -e "${sub_string}")
 }
 
+function list() {
+  set +e
+  find $ZETTELKASTEN_DIR  -type f -exec basename {} \;
+  set -e
+}
+
 function main() {
   # mandatory env
   if [ ! -f "${zk_config}" ]; then
@@ -355,6 +362,10 @@ function main() {
     "search"| "s")
       search_content "${2}"
       ;;
+    
+    "list" | "ls")
+      list
+    ;;
 
     "home")
       home "$2"

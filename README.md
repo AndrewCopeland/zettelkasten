@@ -32,6 +32,7 @@ Commands:
   ob, open-browser  Open an existing zettel in github using Google Chome
   t, tag            Search zettels for a specific tag
   s, search         Search zettels for a sub string
+  ls, list          List all zettels
   rm, remove        Remove a zettel
   l, link           Link 2 zettels together
   rml, rm-link      Remove a link between 2 zettels
