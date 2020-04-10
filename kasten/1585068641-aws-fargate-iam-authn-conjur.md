@@ -22,22 +22,6 @@ curl 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
 }
 ```
 
-### Java
-```java
-String credUrl = System.getenv("AWS_CONTAINER_CREDENTIALS_RELATIVE_URI");
-RestTemplate restTemplate = new RestTemplate();
-String result = restTemplate.getFromObject(credUrl, String.class);
-
-try {
-	AWSCredentials awsCredentials = mapper.readVault(result, AWSCredentials.class);
-	System.out.println(awsCredentials.accessKeyId);
-	System.out.println(awsCredentials.secretAccessKey);
-	System.out.println(awsCredentials.token);
-} catch (JsonProcessingException e) {
-	e.printStackTrace();
-}
-```
-
 
 ## Links
 - [1584721584-conjur-authn-iam.md](1584721584-conjur-authn-iam.md)
