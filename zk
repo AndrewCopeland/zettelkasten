@@ -7,27 +7,70 @@ YELLOW='\033[0;33m'
 zk_config="$HOME/.zettelkasten"
 
 
+# multi-lined strings
+USAGE=$(cat <<-END
+
+Usage:	zk COMMAND
+
+A note taking application following the Zettelkasten method.
+
+Commands:
+  n, new            Create a new zettel
+  o, open           Open an existing zettel in vi
+  oc, open-code     Open an existing zettel in Visual Studio Code
+  ob, open-browser  Open an existing zettel in github using Google Chome
+  t, tag            Search zettels for a specific tag
+  s, search         Search for a sub string within all zettels
+  ls, list          List all zettels
+  rm, remove        Remove a zettel
+  l, link           Link 2 zettels together
+  rml, rm-link      Remove a link between 2 zettels
+  s, sync           Sync git zettelkasten to local zettelkasten
+  home              Display zettelkasten home directory
+  init              Initialize the $HOME/.zettelkasten
+END
+)
+
+function new_zettel_default() {
+  zettel_title="$1"
+  default_tags="#exampletag"
+  zettel_template=$(cat <<-END
+$zettel_title
+$default_tags
+
+
+
+## Links
+END
+)
+  echo "$zettel_template"
+}
+
 # -- utils --
+function echo_usage() {
+  echo "$USAGE"
+}
+
 function fail() {
   echo -e "${RED}ERROR: $1${NC}" > /dev/tty
   exit 1
 }
 
-function echo_green {
+function echo_green() {
 	echo -e "${GREEN}${1}${NC}" > /dev/tty
 }
 
-function echo_yellow {
+function echo_yellow() {
 	echo -e "${YELLOW}${1}${NC}" > /dev/tty
 }
 
-function list_zettels {
+function list_zettels() {
   set +e
   echo "$(find $ZETTELKASTEN_DIR  -type f -exec basename {} \;)"  > /dev/tty
   set -e
 }
 
-function find_zettel {
+function find_zettel() {
   # validate search field were procided and create search fields for grep
   search_fields="$1"
   if [[ -z "$search_fields" ]];then
@@ -54,47 +97,6 @@ function find_zettel {
   echo "$zettels"
 }
 
-function echo_usage {
-  usage=$(cat <<-END
-
-Usage:	zk COMMAND
-
-A note taking application following the Zettelkasten method.
-
-Commands:
-  n, new            Create a new zettel
-  o, open           Open an existing zettel in vi
-  oc, open-code     Open an existing zettel in Visual Studio Code
-  ob, open-browser  Open an existing zettel in github using Google Chome
-  t, tag            Search zettels for a specific tag
-  s, search         Search for a sub string within all zettels
-  ls, list          List all zettels
-  rm, remove        Remove a zettel
-  l, link           Link 2 zettels together
-  rml, rm-link      Remove a link between 2 zettels
-  s, sync           Sync git zettelkasten to local zettelkasten
-  home              Display zettelkasten home directory
-  init              Initialize the $HOME/.zettelkasten
-END
-)
-  echo "$usage"
-}
-
-function new_zettel_default() {
-  zettel_title="$1"
-  default_tags="#exampletag"
-  zettel_template=$(cat <<-END
-$zettel_title
-$default_tags
-
-
-
-## Links
-END
-)
-  echo "$zettel_template"
-}
-
 function git_push() {
   if [[ "$ZETTELKASTEN_AUTO_GIT_PUSH" == "yes" ]]; then
     cwd=$(pwd)
@@ -116,6 +118,61 @@ function remove_zettel_link() {
   rm "$ZETTELKASTEN_DIR/$zettel.bak"
 }
 
+function get_os_environment_type() {
+  # if '/prov/version' files exists then assume running in 'WSL'
+  if [ -f "/proc/version" ]; then
+    echo "wsl"
+  else
+    # default to osx
+    echo "osx"
+  fi
+}
+
+function fail_invalid_environment() {
+  fail "Invalid environment '${environment}'. Valid environment: osx or wsl"
+}
+
+function get_default_md5() {
+  environment="${1}"
+  case "${environment}" in
+    "osx")
+      echo "md5"
+      ;;
+
+    "wsl")
+      echo "md5sum"
+      ;;
+
+    *)
+      fail_invalid_environment
+      ;;
+  esac
+}
+
+function get_default_basename() {
+  environment="${1}"
+  case "${environment}" in
+    "osx")
+      echo "basename --"
+      ;;
+
+    "wsl")
+      echo "basename -a"
+      ;;
+
+    *)
+      fail_invalid_environment
+      ;;
+  esac
+}
+
+function get_zettel_md5() {
+  zettel="${1}"
+  zettel_fname="${ZETTELKASTEN_DIR}/${zettel}"
+  cat "$zettel_fname" | $ZETTELKASTEN_MD5_COMMAND
+}
+
+# -- commands --
 function new() {
   title="$@"
   if [[ -z "$title" ]]; then
@@ -127,7 +184,8 @@ function new() {
   default_tags="#exampletag"
   now=$(date +%s)
   zettel_title="# $now $title"
-  zettel_fname="$ZETTELKASTEN_DIR/$now-$title.md"
+  zettel="$now-$title.md"
+  zettel_fname="$ZETTELKASTEN_DIR/${zettel}"
   if [ -f "$zettel_fname" ]; then
     fail "zettel '$zettel_fname' already exists"
   fi
@@ -135,12 +193,14 @@ function new() {
   zettel_template=$(new_zettel_default "$zettel_title")
   touch "$zettel_fname"
   echo "$zettel_template" > "$zettel_fname"
-  before=$(cat "$zettel_fname" | md5)
+
+  before=$(get_zettel_md5 "${zettel}")
   vi +4 "$zettel_fname"
-  after=$(cat "$zettel_fname" | md5)
+  after=$(get_zettel_md5 "${zettel}")
+
   if [[ "$before" != "$after" ]]; then
-    git_push "added zettel $now-$title.md" "$zettel_fname"
-    echo_green "created zettel '$now-$title.md'"
+    git_push "added zettel ${zettel}" "${zettel_fname}"
+    echo_green "created zettel '${zettel}'"
   else
     rm -f $zettel_fname
     echo_yellow "WARNING: Zettel was not created since the contents are empty"
@@ -151,9 +211,9 @@ function open_vi() {
   search_fields="$1"
   zettel=$(find_zettel "$search_fields" || exit)
   
-  before=$(cat "$ZETTELKASTEN_DIR/$zettel" | md5)
+  before=$(get_zettel_md5 "${zettel}")
   vi +4 "$ZETTELKASTEN_DIR/$zettel"
-  after=$(cat "$ZETTELKASTEN_DIR/$zettel" | md5)
+  after=$(get_zettel_md5 "${zettel}")
   
   if [[ "$before" != "$after" ]]; then
     git_push "updating zettel $zettel" "$zettel"
@@ -165,9 +225,9 @@ function open_visual_code() {
   search_fields="$1"
   zettel=$(find_zettel "$search_fields" || exit)
   
-  before=$(cat "$ZETTELKASTEN_DIR/$zettel" | md5)
+  before=$(get_zettel_md5 "${zettel}")
   code --new-window --wait "$ZETTELKASTEN_DIR/$zettel"
-  after=$(cat "$ZETTELKASTEN_DIR/$zettel" | md5)
+  after=$(get_zettel_md5 "${zettel}")
   
   if [[ "$before" != "$after" ]]; then
     git_push "updating zettel $zettel" "$zettel"
@@ -247,8 +307,15 @@ function home() {
   if [[ -z "$new_home_dir" ]]; then
     echo "Current Zettel directory: $ZETTELKASTEN_DIR"
   else
-    echo "export ZETTEL_DIR=\"$new_home_dir\""
+    echo "export ZETTELKASTEN_DIR=\"$new_home_dir\""
   fi
+}
+
+function append_to_zettelkasten_config() {
+  key="${1}"
+  value="${2}"
+
+  echo "${key}=\"${value}\"" >> "${zk_config}"
 }
 
 function init() {
@@ -265,11 +332,26 @@ function init() {
     zk_auto_git_push="no"
   fi
 
+  environment=$(get_os_environment_type)
+  md5_command=$(get_default_md5 "${environment}")
+  basename_command=$(get_default_basename "${environment}")
   rm -f "${zk_config}"
-  echo "ZETTELKASTEN_DIR=${zk_dir}" >> "${zk_config}"
-  echo "ZETTELKASTEN_AUTO_GIT_PUSH=${zk_auto_git_push}" >> "${zk_config}"
-  echo "ZETTELKASTEN_GIT_DIR=${zk_git_dir}" >> "${zk_config}"
-  echo "Initialized  '${zk_config}'"
+
+  # the values specified in the '~/.zettelkasten'
+  # the directory in which all zettels reside
+  append_to_zettelkasten_config "ZETTELKASTEN_DIR" "${zk_dir}"
+  # auto push zettels to git when created, updated or deleted [yes|no]
+  append_to_zettelkasten_config "ZETTELKASTEN_AUTO_GIT_PUSH" "${zk_auto_git_push}"
+  # the directory in the git repo where the zettels reside. 
+  # if zettels reside on repo root level then this does not need to be provided
+  # this is only used when executing 'open-browser'
+  append_to_zettelkasten_config "ZETTELKASTEN_GIT_DIR" "${zk_git_dir}"
+  # the os environment in which the zk application is being run [osx|wsl]
+  append_to_zettelkasten_config "ZETTELKASTEN_ENVIRONMENT" "${environment}"
+  # the command used when md5 hashing zettels
+  append_to_zettelkasten_config "ZETTELKASTEN_MD5_COMMAND" "${md5_command}"
+  # the command used when getting the basename of zettels
+  append_to_zettelkasten_config "ZETTELKASTEN_BASENAME_COMMAND" "${basename_command}"
 }
 
 # perform a 'git pull' in the kasten directory
@@ -279,7 +361,7 @@ function sync() {
   fi
 }
 
-# remove a 1 specific zettel and make sure this is reflected in git
+# remove a specific zettel and make sure this is reflected in git
 function remove() {
   search_fields="$1"
   zettel=$(find_zettel "$search_fields" || exit)
@@ -295,12 +377,12 @@ function find_tag() {
 
 function search_content() {
   sub_string="${1}"
-  basename -- $(grep -rnl "$ZETTELKASTEN_DIR" -e "${sub_string}")
+  $ZETTELKASTEN_BASENAME_COMMAND $(grep -rnl "$ZETTELKASTEN_DIR" -e "${sub_string}")
 }
 
 function list() {
   set +e
-  find $ZETTELKASTEN_DIR  -type f -exec basename {} \;
+  find $ZETTELKASTEN_DIR -type f -exec basename {} \;
   set -e
 }
 
