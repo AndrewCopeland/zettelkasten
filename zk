@@ -132,38 +132,32 @@ function fail_invalid_environment() {
   fail "Invalid environment '${environment}'. Valid environment: osx or wsl"
 }
 
+function get_default() {
+  target_environment="${1}"
+  current_environment="${2}"
+  default_value="${3}"
+
+  if [ "${target_environment}" = "${current_environment}" ]; then
+    echo "${default_value}"
+  fi
+}
+
 function get_default_md5() {
   environment="${1}"
-  case "${environment}" in
-    "osx")
-      echo "md5"
-      ;;
-
-    "wsl")
-      echo "md5sum"
-      ;;
-
-    *)
-      fail_invalid_environment
-      ;;
-  esac
+  get_default "osx" "${environment}" "md5"
+  get_default "wsl" "${environment}" "md5sum"
 }
 
 function get_default_basename() {
   environment="${1}"
-  case "${environment}" in
-    "osx")
-      echo "basename --"
-      ;;
+  get_default "osx" "${environment}" "basename --"
+  get_default "wsl" "${environment}" "basename -a"
+}
 
-    "wsl")
-      echo "basename -a"
-      ;;
-
-    *)
-      fail_invalid_environment
-      ;;
-  esac
+function get_default_browser() {
+  environment="${1}"
+  get_default "osx" "${environment}" "open"
+  get_default "wsl" "${environment}" "cmd.exe /C start"
 }
 
 function get_zettel_md5() {
@@ -238,9 +232,15 @@ function open_visual_code() {
 function open_browser() {
   search_fields="$1"
   zettel=$(find_zettel "$search_fields" || exit)
-
-  github_endpoint=$(cd $ZETTELKASTEN_DIR && git remote show origin | grep "Push " | awk -F ":" '{print $3}' | sed 's/.git//g')
-  open -a "Google Chrome" "https://github.com/$github_endpoint/tree/master/$ZETTELKASTEN_GIT_DIR/$zettel"
+  remote_url=$(cd $ZETTELKASTEN_DIR && git config --get remote.origin.url)
+  # if remote_url contains a @ that means the repo was cloned using ssh key
+  if [ "$remote_url" = *"@"* ]; then
+    github_endpoint=$(echo "${remote_url}" | awk -F ':' '{print $2}')
+  else
+    github_endpoint=$(echo "${remote_url}" | awk -F '.com/' '{print $2}')
+  fi
+  github_endpoint=$(echo "${github_endpoint}" | sed 's/.git//g')
+  $ZETTELKASTEN_BROWSER_COMMAND "https://github.com/$github_endpoint/tree/master/$ZETTELKASTEN_GIT_DIR/$zettel"
 }
 
 function link() {
@@ -335,6 +335,7 @@ function init() {
   environment=$(get_os_environment_type)
   md5_command=$(get_default_md5 "${environment}")
   basename_command=$(get_default_basename "${environment}")
+  browser_command=$(get_default_browser "${environment}")
   rm -f "${zk_config}"
 
   # the values specified in the '~/.zettelkasten'
@@ -352,6 +353,8 @@ function init() {
   append_to_zettelkasten_config "ZETTELKASTEN_MD5_COMMAND" "${md5_command}"
   # the command used when getting the basename of zettels
   append_to_zettelkasten_config "ZETTELKASTEN_BASENAME_COMMAND" "${basename_command}"
+  # the command used when opening the browser
+  append_to_zettelkasten_config "ZETTELKASTEN_BROWSER_COMMAND" "${browser_command}"
 }
 
 # perform a 'git pull' in the kasten directory
