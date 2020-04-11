@@ -1,5 +1,5 @@
 # zettelkasten
-Creating notes with the zettelkasten note taking method and storing all notes on github
+A note taking application following the Zettelkasten method.
 
 ## Installation
 ```bash
@@ -15,7 +15,7 @@ Zettelkasten Directory: /Users/acopeland/git/AndrewCopeland/zettelkasten/kasten
 Zettelkasten auto git push[yes/no]: yes
 Zettelkasten git directory(optional): kasten
 Initialized  '/Users/acopeland/.zettelkasten'
-copeland:zettelkasten acopeland$
+$
 ```
 If you need to re-initialize the config run `zk init`.
 
@@ -41,7 +41,7 @@ Commands:
   init              Initialize the $HOME/.zettelkasten
 ```
 
-To create a zettel perform the following. This will open up vi and once you are done save the zettel will be created.
+To create a zettel perform the following. This will open up vi and once you are done save the zettel.
 ```bash
 zk new "my first zettel"
 ```
