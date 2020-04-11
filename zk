@@ -189,7 +189,7 @@ function new() {
   echo "$zettel_template" > "$zettel_fname"
 
   before=$(get_zettel_md5 "${zettel}")
-  vi +4 "$zettel_fname"
+  $ZETTELKASTEN_DEFAULT_TEXT_EDITOR +4 "$zettel_fname"
   after=$(get_zettel_md5 "${zettel}")
 
   if [[ "$before" != "$after" ]]; then
@@ -198,6 +198,21 @@ function new() {
   else
     rm -f $zettel_fname
     echo_yellow "WARNING: Zettel was not created since the contents are empty"
+  fi
+}
+
+function open_editor() {
+  editor="${1}"
+  search_fields="${2}"
+  zettel=$(find_zettel "$search_fields" || exit)
+  
+  before=$(get_zettel_md5 "${zettel}")
+  $editor +4 "$ZETTELKASTEN_DIR/$zettel"
+  after=$(get_zettel_md5 "${zettel}")
+  
+  if [[ "$before" != "$after" ]]; then
+    git_push "updating zettel $zettel" "$zettel"
+    echo_green "updated '$zettel'"
   fi
 }
 
@@ -322,6 +337,11 @@ function init() {
   read -p "Zettelkasten Directory: " zk_dir
   read -p "Zettelkasten auto git push[yes/no]: " zk_auto_git_push
   read -p "Zettelkasten git directory(optional): " zk_git_dir
+  read -p "Default command line text editor[vi/emacs/nano]: " zk_text_editor
+
+  if [ -z "${zk_text_editor}" ]; then
+    zk_text_editor="vi"
+  fi
 
   if [ ! -d "${zk_dir}" ]; then
     fail "Directory '${zk_dir}' does not exist"
@@ -353,8 +373,10 @@ function init() {
   append_to_zettelkasten_config "ZETTELKASTEN_MD5_COMMAND" "${md5_command}"
   # the command used when getting the basename of zettels
   append_to_zettelkasten_config "ZETTELKASTEN_BASENAME_COMMAND" "${basename_command}"
-  # the command used when opening the browser
+  # the command used when using 'open-browser'
   append_to_zettelkasten_config "ZETTELKASTEN_BROWSER_COMMAND" "${browser_command}"
+  # the command used when using 'open'
+  append_to_zettelkasten_config "ZETTELKASTEN_DEFAULT_TEXT_EDITOR" "${zk_text_editor}"
 }
 
 # perform a 'git pull' in the kasten directory
@@ -416,8 +438,16 @@ function main() {
       new_visual_code "${@:2}"
       ;;
 
-    "open-vi" | "open" | "ov" | "o")
-      open_vi "$2"
+    "open" | "o")
+      open_editor "${ZETTELKASTEN_DEFAULT_TEXT_EDITOR}" "${2}"
+      ;;
+
+    "open-vi" | "ov")
+      open_editor "vi" "${2}"  
+      ;;
+
+    "open-emacs" | "oe")
+      open_editor "emacs" "${2}" 
       ;;
 
     "open-browser" | "ob")
