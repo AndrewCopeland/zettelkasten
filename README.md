@@ -9,8 +9,8 @@ curl -s -o /usr/local/bin/zk https://raw.githubusercontent.com/AndrewCopeland/ze
 ## Getting started
 To initialize the zettelkasten config just run `zk`.
 ```bash
-copeland:zettelkasten acopeland$ zk
-'/Users/acopeland/.zettelkasten' could not be found
+$ zk
+'~/.zettelkasten' could not be found
 Zettelkasten Directory: /Users/acopeland/git/AndrewCopeland/zettelkasten/kasten
 Zettelkasten auto git push[yes/no]: yes
 Zettelkasten git directory(optional): kasten
@@ -51,7 +51,7 @@ To open an existing zettel perform the following. This will open up vi on the ex
 zk open my-first-zettel
 ```
 
-To link zettels together perform the following. This performs a search just like `open`. All zetels have a unique id associated with the epoch time when the zettel was created which can be used when linking also.
+To link zettels together perform the following.
 ```bash
 zk link my-first-zettel my-second-zettel
 ```
