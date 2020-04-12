@@ -187,7 +187,10 @@ function validate_mandatory_parameter() {
 }
 
 function get_datestamp() {
-  datestamp_format="+%s"
+  datestamp_format="${ZETTELKASTEN_DATE_TIME_STAMP_FORMAT}"
+  if [ -z "${datestamp_format}" ]; then
+      datestamp_format="+%s"
+  fi
   datestamp=$(date "${datestamp_format}")
   echo "${datestamp}"
 }
@@ -394,6 +397,8 @@ function init() {
   append_to_zettelkasten_config "ZETTELKASTEN_BROWSER_COMMAND" "${browser_command}"
   # the command used when using 'open'
   append_to_zettelkasten_config "ZETTELKASTEN_DEFAULT_TEXT_EDITOR" "${zk_text_editor}"
+  # the datetime stamp format used when creating the zettels
+  append_to_zettelkasten_config "ZETTELKASTEN_DATE_TIME_STAMP_FORMAT" "+%s"
 }
 
 # perform a 'git pull' in the kasten directory
