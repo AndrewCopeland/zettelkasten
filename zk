@@ -345,7 +345,7 @@ function init() {
 
   if [ ! -d "${zk_dir}" ]; then
     fail "Directory '${zk_dir}' does not exist"
-  fi 
+  fi
 
   zk_auto_git_push=$(echo $zk_auto_git_push | tr '[:upper:]' '[:lower:]')
   if [[ "${zk_auto_git_push}" != "yes" ]]; then
@@ -412,23 +412,23 @@ function list() {
 }
 
 function main() {
-  # mandatory env
+  action="${1}"
+
+  # if action is init create the ~/.zettelkasten config file and exit
+  if [ "${action}" = "init" ]; then
+    init
+    exit 1
+  fi
+  # if config does not exist then prompt user to run 'zk init'
   if [ ! -f "${zk_config}" ]; then
     echo "'${zk_config}' could not be found"
-    init
+    echo "run 'zk init' to initialize the zettelkasten config"
+    exit 1
   fi
   source "${zk_config}"
 
-  # attempt to create zettel dir
-  if [ ! -d "$ZETTELKASTEN_DIR" ]; then
-    echo "Attempting to create '$ZETTELKASTEN_DIR' since it does not exist"
-    mkdir "$ZETTELKASTEN_DIR"
-    echo "Created zettel directory '$ZETTELKASTEN_DIR'"
-  fi
-
   # perform zettel actions
   sync &>/dev/null
-  action=$1
   case $action in
     "new-vi" | "new" | "n")
       new "${@:2}"
@@ -480,7 +480,7 @@ function main() {
     
     "list" | "ls")
       list
-    ;;
+      ;;
 
     "home")
       home "$2"
@@ -488,10 +488,6 @@ function main() {
 
     "sync" | "s")
       sync
-      ;;
-    
-    "init")
-      init
       ;;
 
     *)
