@@ -173,17 +173,35 @@ function editor_clean_up() {
   rm -f "${zettel_path}~"
 }
 
+function validate_mandatory_parameter() {
+  parameter="${1}"
+  usage_message="${2}"
+  failure_message="${3}"
+
+  if [ -z "${parameter}" ]; then
+    if [ ! -z "${usage_messages}" ]; then
+      echo "${usage_message}"
+    fi
+    fail "${failure_message}"
+  fi
+}
+
+function get_datestamp() {
+  datestamp_format="+%s"
+  datestamp=$(date "${datestamp_format}")
+  echo "${datestamp}"
+}
+
 # -- commands --
 function new() {
   title="$@"
-  if [[ -z "$title" ]]; then
-    echo "usage: $0 create <zettel title>"
-    fail "Zettel title not provided"
-  fi
+
+  # validate mandatory parameter
+  usage="usage: $0 new <zettel title>"
+  validate_mandatory_parameter "${title}" "${usage}" "Zettel title not provided"
 
   title=$(echo "$title" | sed 's/ /-/g')
-  default_tags="#exampletag"
-  now=$(date +%s)
+  now=$(get_datestamp)
   zettel_title="# $now $title"
   zettel="$now-$title.md"
   zettel_fname="$ZETTELKASTEN_DIR/${zettel}"
@@ -258,16 +276,10 @@ function link() {
   from_link=$1
   to_link=$2
 
-  # do validation here to give usage error message
-  # associated with the link action
-  if [[ -z "$from_link" ]]; then
-    echo "usage: $0 link 1584648495 1584648508"
-    fail "Empty from_link argument"
-  fi
-  if [[ -z "$to_link" ]]; then
-    echo "usage: $0 link 1584648495 1584648508"
-    fail "Empty to_link argument"
-  fi
+  # validate mandatory parameters
+  usage="usage: $0 link 1584648495 1584648508"
+  validate_mandatory_parameter "${from_link}" "${usage}" "Empty from_link parameter"
+  validate_mandatory_parameter "${to_link}" "${usage}" "Empty to_link parameter"
 
   from_fname=$(find_zettel "$from_link")
   to_fname=$(find_zettel "$to_link")
@@ -287,20 +299,16 @@ function rm_link() {
   from_link=$1
   to_link=$2
 
-  # do validation here to give usage error message
-  # associated with the link action
-  if [[ -z "$from_link" ]]; then
-    echo "usage: $0 link 1584648495 1584648508"
-    fail "Empty from_link argument"
-  fi
-  if [[ -z "$to_link" ]]; then
-    echo "usage: $0 link 1584648495 1584648508"
-    fail "Empty to_link argument"
-  fi
+  # validate mandatory parameters
+  usage="usage: $0 link 1584648495 1584648508"
+  validate_mandatory_parameter "${from_link}" "${usage}" "Empty from_link parameter"
+  validate_mandatory_parameter "${to_link}" "${usage}" "Empty to_link parameter"
 
+  # get zettel file names
   from_fname=$(find_zettel "$from_link")
   to_fname=$(find_zettel "$to_link")
 
+  # remove the zettel links from both files
   remove_zettel_link $from_fname $to_fname
   remove_zettel_link $to_fname $from_fname
 
