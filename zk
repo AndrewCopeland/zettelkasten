@@ -166,6 +166,13 @@ function get_zettel_md5() {
   cat "$zettel_fname" | $ZETTELKASTEN_MD5_COMMAND
 }
 
+function editor_clean_up() {
+  zettel="${1}"
+  zettel_path="${ZETTELKASTEN_DIR}/${zettel}"
+
+  rm -f "${zettel_path}~"
+}
+
 # -- commands --
 function new() {
   title="$@"
@@ -199,6 +206,7 @@ function new() {
     rm -f $zettel_fname
     echo_yellow "WARNING: Zettel was not created since the contents are empty"
   fi
+  editor_clean_up "${zettel}"
 }
 
 function open_editor() {
@@ -214,6 +222,7 @@ function open_editor() {
     git_push "updating zettel $zettel" "$zettel"
     echo_green "updated '$zettel'"
   fi
+  editor_clean_up "${zettel}"
 }
 
 function open_vi() {
@@ -228,6 +237,7 @@ function open_vi() {
     git_push "updating zettel $zettel" "$zettel"
     echo_green "updated '$zettel'"
   fi
+  editor_clean_up "${zettel}"
 }
 
 function open_visual_code() {
@@ -242,6 +252,7 @@ function open_visual_code() {
     git_push "updating zettel $zettel" "$zettel"
     echo_green "updated '$zettel'"
   fi
+  editor_clean_up "${zettel}"
 }
 
 function open_browser() {
