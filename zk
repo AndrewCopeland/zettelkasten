@@ -198,7 +198,7 @@ function validate_dir_is_git_repo() {
     set +e
     cd "${directory}" && git_repogit rev-parse --is-inside-work-tree
     if [ "${?}" != "0" ]; then
-      fail "'${directory}' is not a git repository. If you do not want to use get set 'ZETTELKASTEN_AUTO_GIT_PUSH' in the '${zk_config}' to no."
+      fail "'${directory}' is not a git repository. If you do not want to use git set 'ZETTELKASTEN_AUTO_GIT_PUSH' in the '${zk_config}' to no."
     fi
     set -e
   fi
@@ -443,7 +443,7 @@ function main() {
     exit 1
   fi
   source "${zk_config}"
-  validate_dir_is_git_repo "${ZETTELKASTEN_AUTO_GIT_PUSH}"
+  validate_dir_is_git_repo "${ZETTELKASTEN_DIR}"
 
   # perform zettel actions
   sync &>/dev/null
