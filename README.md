@@ -56,6 +56,26 @@ To link zettels together perform the following.
 zk link my-first-zettel my-second-zettel
 ```
 
+## Zettelkasten configuration
+When executing `zk init` a configuration file is created in your home directory called `.zettelkasten`.
+This file contains variables that are used by `zk`. An explaination of each of these variables are below:
+- `ZETTELKASTEN_DIR`: Directory in which all zettels reside
+- `ZETTELKASTEN_AUTO_GIT_PUSH`: Auto push zettels to git when created, updated or deleted. Valid values are `yes` or `no`.
+- `ZETTELKASTEN_GIT_DIR`: Set this variable if the kasten resides within a specific folder in your git repo. This is used when opening a zettel in github.
+- `ZETTELKASTEN_ENVIRONMENT`: The OS environment in which the zk application is running. This value should be set automatically by `zk init`. Valid values are `osx` or `wsl`.
+-  `ZETTELKASTEN_MD5_COMMAND`: The command used when md5 hashing zettels. This value should be set automatically by `zk init` depending on the `ZETTELKASTEN_ENVIRONMENT`.
+- `ZETTELKASTEN_BASENAME_COMMAND`: The command used when getting the basename of zettels. This value should be set automatically by `zk init` depending on the `ZETTELKASTEN_ENVIRONMENT`.
+- `ZETTELKASTEN_BROWSER_COMMAND`: The command used when executing 'open-browser' action. This value should be set automatically by `zk init` depending on the `ZETTELKASTEN_ENVIRONMENT`.
+- `ZETTELKASTEN_DEFAULT_TEXT_EDITOR`: The command used when using 'open'. This is configurable and can be set to `vi`, `vim`, `emacs` or `nano`.
+- `ZETTELKASTEN_DATE_TIME_STAMP_FORMAT`: The datetime stamp format used when creating the zettels. This will default to `+s` which is EPOCH time.
+
+## Uninstall
+To remove the application perform the following:
+```bash
+rm /usr/local/bin/zk
+rm "${HOME}/.zettelkasten"
+```
+
 ## Limitations
 - Currently only tested on Mac
 - Google Chrome and Visual Code must be installed to use `open-code` or `open-browser`
