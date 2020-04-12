@@ -225,21 +225,6 @@ function open_editor() {
   editor_clean_up "${zettel}"
 }
 
-function open_vi() {
-  search_fields="$1"
-  zettel=$(find_zettel "$search_fields" || exit)
-  
-  before=$(get_zettel_md5 "${zettel}")
-  vi +4 "$ZETTELKASTEN_DIR/$zettel"
-  after=$(get_zettel_md5 "${zettel}")
-  
-  if [[ "$before" != "$after" ]]; then
-    git_push "updating zettel $zettel" "$zettel"
-    echo_green "updated '$zettel'"
-  fi
-  editor_clean_up "${zettel}"
-}
-
 function open_visual_code() {
   search_fields="$1"
   zettel=$(find_zettel "$search_fields" || exit)
