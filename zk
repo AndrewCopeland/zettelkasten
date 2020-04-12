@@ -192,6 +192,18 @@ function get_datestamp() {
   echo "${datestamp}"
 }
 
+function validate_dir_is_git_repo() {
+  if [ "${ZETTELKASTEN_AUTO_GIT_PUSH}" = "yes" ]; then
+    directory="${1}"
+    set +e
+    cd "${directory}" && git_repogit rev-parse --is-inside-work-tree
+    if [ "${?}" != "0" ]; then
+      fail "'${directory}' is not a git repository. If you do not want to use get set 'ZETTELKASTEN_AUTO_GIT_PUSH' in the '${zk_config}' to no."
+    fi
+    set -e
+  fi
+}
+
 # -- commands --
 function new() {
   title="$@"
@@ -355,6 +367,7 @@ function init() {
   if [[ "${zk_auto_git_push}" != "yes" ]]; then
     zk_auto_git_push="no"
   fi
+  validate_dir_is_git_repo "${zk_git_dir}"
 
   environment=$(get_os_environment_type)
   md5_command=$(get_default_md5 "${environment}")
@@ -430,6 +443,7 @@ function main() {
     exit 1
   fi
   source "${zk_config}"
+  validate_dir_is_git_repo "${ZETTELKASTEN_AUTO_GIT_PUSH}"
 
   # perform zettel actions
   sync &>/dev/null
