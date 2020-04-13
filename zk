@@ -208,8 +208,9 @@ function validate_dir_is_git_repo() {
 }
 
 # -- commands --
-function new() {
-  title="$@"
+function new_editor() {
+  editor="${1}"
+  title="${@:2}"
 
   # validate mandatory parameter
   usage="usage: $0 new <zettel title>"
@@ -229,43 +230,7 @@ function new() {
   echo "$zettel_template" > "$zettel_fname"
 
   before=$(get_zettel_md5 "${zettel}")
-  $ZETTELKASTEN_DEFAULT_TEXT_EDITOR +4 "$zettel_fname"
-  after=$(get_zettel_md5 "${zettel}")
-
-  if [[ "$before" != "$after" ]]; then
-    git_push "added zettel ${zettel}" "${zettel_fname}"
-    echo_green "created zettel '${zettel}'"
-  else
-    rm -f $zettel_fname
-    echo_yellow "WARNING: Zettel was not created since the contents are empty"
-  fi
-  editor_clean_up "${zettel}"
-}
-
-function new_visual_code() {
-  title="$@"
-
-  # validate mandatory parameter
-  usage="usage: $0 new <zettel title>"
-  validate_mandatory_parameter "${title}" "${usage}" "Zettel title not provided"
-
-  title=$(echo "$title" | sed 's/ /-/g')
-  now=$(get_datestamp)
-  zettel_title="# $now $title"
-  zettel="$now-$title.md"
-  zettel_fname="$ZETTELKASTEN_DIR/${zettel}"
-
-  if [ -f "$zettel_fname" ]; then
-    fail "zettel '$zettel_fname' already exists"
-  fi
-
-  zettel_template=$(new_zettel_default "$zettel_title")
-  touch "$zettel_fname"
-  echo "$zettel_template" > "$zettel_fname"
-
-  before=$(get_zettel_md5 "${zettel}")
-  #$ZETTELKASTEN_DEFAULT_TEXT_EDITOR +4 "$zettel_fname"
-  code --new-window --wait "$zettel_fname"
+  $editor "$zettel_fname"
   after=$(get_zettel_md5 "${zettel}")
 
   if [[ "$before" != "$after" ]]; then
@@ -284,22 +249,7 @@ function open_editor() {
   zettel=$(find_zettel "$search_fields" || exit)
   
   before=$(get_zettel_md5 "${zettel}")
-  $editor +4 "$ZETTELKASTEN_DIR/$zettel"
-  after=$(get_zettel_md5 "${zettel}")
-  
-  if [[ "$before" != "$after" ]]; then
-    git_push "updating zettel $zettel" "$zettel"
-    echo_green "updated '$zettel'"
-  fi
-  editor_clean_up "${zettel}"
-}
-
-function open_visual_code() {
-  search_fields="$1"
-  zettel=$(find_zettel "$search_fields" || exit)
-  
-  before=$(get_zettel_md5 "${zettel}")
-  code --new-window --wait "$ZETTELKASTEN_DIR/$zettel"
+  $editor "$ZETTELKASTEN_DIR/$zettel"
   after=$(get_zettel_md5 "${zettel}")
   
   if [[ "$before" != "$after" ]]; then
@@ -435,6 +385,12 @@ function init() {
   append_to_zettelkasten_config "ZETTELKASTEN_DEFAULT_TEXT_EDITOR" "${zk_text_editor}"
   # the datetime stamp format used when creating the zettels
   append_to_zettelkasten_config "ZETTELKASTEN_DATE_TIME_STAMP_FORMAT" "+%s"
+  # the vi command
+  append_to_zettelkasten_config "ZETTELKASTEN_VI_COMMAND" "vi +2"
+  # the emacs command
+  append_to_zettelkasten_config "ZETTELKASTEN_EMACS_COMMAND" "emacs +2"
+  # the visual studio code command
+  append_to_zettelkasten_config "ZETTELKASTEN_VISUAL_STUDIO_CODE_COMMAND" "code --new-window --wait"
 }
 
 # perform a 'git pull' in the kasten directory
@@ -489,12 +445,20 @@ function main() {
   # perform zettel actions
   sync_zettelkasten &>/dev/null
   case $action in
-    "new-vi" | "new" | "n")
-      new "${@:2}"
+    "new" | "n")
+      new_editor "${ZETTELKASTEN_DEFAULT_TEXT_EDITOR}" "${@:2}"
+      ;;
+
+    "new-vi" | "nv")
+      new_editor "${ZETTELKASTEN_VI_COMMAND}" "${@:2}"
+      ;;
+
+    "new-emacs" | "ne")
+      new_editor "${ZETTELKASTEN_EMACS_COMMAND}" "${@:2}"
       ;;
     
     "new-code" | "nc")
-      new_visual_code "${@:2}"
+      new_editor "${ZETTELKASTEN_VISUAL_STUDIO_CODE_COMMAND}" "${@:2}"
       ;;
 
     "open" | "o")
@@ -502,19 +466,19 @@ function main() {
       ;;
 
     "open-vi" | "ov")
-      open_editor "vi" "${2}"  
+      open_editor "${ZETTELKASTEN_VI_COMMAND}" "${2}"  
       ;;
 
     "open-emacs" | "oe")
-      open_editor "emacs" "${2}" 
+      open_editor "${ZETTELKASTEN_EMACS_COMMAND}" "${2}" 
+      ;;
+
+    "open-code" | "oc")
+      open_editor "${ZETTELKASTEN_VISUAL_STUDIO_CODE_COMMAND}" "$2"
       ;;
 
     "open-browser" | "ob")
       open_browser "$2"
-      ;;
-
-    "open-code" | "oc")
-      open_visual_code "$2"
       ;;
 
     "link" | "l")
