@@ -26,17 +26,21 @@ Usage:	zk COMMAND
 A note taking application following the Zettelkasten method.
 
 Commands:
-  n, new            Create a new zettel
-  o, open           Open an existing zettel in vi
+  n, new            Create a new zettel and use default editor
+  nv, new-vi        Create a new zettel and edit with vi
+  ne, new-emacs     Create a new zettel and edit with emacs
+  nc, new-code      Create a new zettel and edit with Visual Studio Code
+  o, open           Open an existing zettel in default editor
+  ov, open-vi       Open an existing zettel in vi
+  oe, open-emacs    Open an existing zettel in emacs
   oc, open-code     Open an existing zettel in Visual Studio Code
-  ob, open-browser  Open an existing zettel in github using Google Chome
+  ob, open-browser  Open an existing zettel in github using OS default browser
   t, tag            Search zettels for a specific tag
-  s, search         Search zettels for a sub string
+  s, search         Search for a sub string within all zettels
   ls, list          List all zettels
   rm, remove        Remove a zettel
   l, link           Link 2 zettels together
   rml, rm-link      Remove a link between 2 zettels
-  s, sync           Sync git zettelkasten to local zettelkasten
   home              Display zettelkasten home directory
   init              Initialize the $HOME/.zettelkasten
 ```
@@ -68,6 +72,9 @@ This file contains variables that are used by `zk`. An explaination of each of t
 - `ZETTELKASTEN_BROWSER_COMMAND`: The command used when executing 'open-browser' action. This value should be set automatically by `zk init` depending on the `ZETTELKASTEN_ENVIRONMENT`.
 - `ZETTELKASTEN_DEFAULT_TEXT_EDITOR`: The command used when using 'open'. This is configurable and can be set to `vi`, `vim`, `emacs` or `nano`.
 - `ZETTELKASTEN_DATE_TIME_STAMP_FORMAT`: The datetime stamp format used when creating the zettels. This will default to `+s` which is EPOCH time.
+- `ZETTELKASTEN_VI_COMMAND`: The command used when executing vi. Default is `vi +2`.
+- `ZETTELKASTEN_EMACS_COMMAND`: The command used when execuing emacs. Default is `emacs +2`
+- `ZETTELKASTEN_VISUAL_STUDIO_CODE_COMMAND`: The command used when executing Visual Studio Code. Default is `code --new-window --wait`
 
 ## Uninstall
 To remove the application perform the following:
