@@ -7,17 +7,15 @@ curl -s -o /usr/local/bin/zk https://raw.githubusercontent.com/AndrewCopeland/ze
 ```
 
 ## Getting started
-To initialize the zettelkasten config just run `zk`.
+To initialize the zettelkasten config just run `zk init`.
 ```bash
-$ zk
-'~/.zettelkasten' could not be found
+$ zk init
 Zettelkasten Directory: /Users/acopeland/git/AndrewCopeland/zettelkasten/kasten
-Zettelkasten auto git push[yes/no]: yes
-Zettelkasten git directory(optional): kasten
-Initialized  '/Users/acopeland/.zettelkasten'
+Zettelkasten auto git push[yes/no]: no
+Zettelkasten git directory(optional):
+Default command line text editor[vi/emacs/nano]: vi
 $
 ```
-If you need to re-initialize the config run `zk init`.
 
 ## Usage
 ```
