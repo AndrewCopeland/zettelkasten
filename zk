@@ -242,6 +242,42 @@ function new() {
   editor_clean_up "${zettel}"
 }
 
+function new_visual_code() {
+  title="$@"
+
+  # validate mandatory parameter
+  usage="usage: $0 new <zettel title>"
+  validate_mandatory_parameter "${title}" "${usage}" "Zettel title not provided"
+
+  title=$(echo "$title" | sed 's/ /-/g')
+  now=$(get_datestamp)
+  zettel_title="# $now $title"
+  zettel="$now-$title.md"
+  zettel_fname="$ZETTELKASTEN_DIR/${zettel}"
+
+  if [ -f "$zettel_fname" ]; then
+    fail "zettel '$zettel_fname' already exists"
+  fi
+
+  zettel_template=$(new_zettel_default "$zettel_title")
+  touch "$zettel_fname"
+  echo "$zettel_template" > "$zettel_fname"
+
+  before=$(get_zettel_md5 "${zettel}")
+  #$ZETTELKASTEN_DEFAULT_TEXT_EDITOR +4 "$zettel_fname"
+  code --new-window --wait "$zettel_fname"
+  after=$(get_zettel_md5 "${zettel}")
+
+  if [[ "$before" != "$after" ]]; then
+    git_push "added zettel ${zettel}" "${zettel_fname}"
+    echo_green "created zettel '${zettel}'"
+  else
+    rm -f $zettel_fname
+    echo_yellow "WARNING: Zettel was not created since the contents are empty"
+  fi
+  editor_clean_up "${zettel}"
+}
+
 function open_editor() {
   editor="${1}"
   search_fields="${2}"
