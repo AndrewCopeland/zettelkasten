@@ -34,5 +34,5 @@ To authenticate an entire namespace load the following policy:
 
 
 ## Links
-- [1586875794-conjur-authn-k8s-external-authenticator.md](1586875794-conjur-authn-k8s-external-authenticator.md)
 - [1586274452-conjur-authn-k8s.md](1586274452-conjur-authn-k8s.md)
+- [1586875794-conjur-authn-k8s-external-authenticator.md](1586875794-conjur-authn-k8s-external-authenticator.md)
