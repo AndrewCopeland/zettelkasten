@@ -108,7 +108,7 @@ conjur variable values add conjur/authn-k8s/k8s-cluster-1/kubernetes/api-url "$A
 ```
 
 The k8s authenticator has been configured and enabled for our follower.
-Next step is to define a `host` within conjur that repersents a k8s resources.
+Next step is to define a `host` within conjur that represents a k8s resources.
 [Creating hosts in conjur for authn-k8s](1586877593-conjur-authn-k8s-defining-host.md)
 
 
