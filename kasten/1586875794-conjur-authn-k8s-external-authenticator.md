@@ -18,9 +18,9 @@ Below if the policy that needs to be loaded to configure the external authn-k8s 
   - !webservice
   - !group apps
   - !permit
-      role: !group apps
-      resource: !webservice
-      privileges: [ read, authenticate ]
+    role: !group apps
+    resource: !webservice
+    privileges: [ read, authenticate ]
 ```
 Load the policy by executing the command:
 `conjur policy load root root.yml`
