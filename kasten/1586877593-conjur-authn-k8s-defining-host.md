@@ -10,6 +10,11 @@ This host will represent a specific service accounts from within a namespace
     authn-k8s/namespace: <application namespace>
     authn-k8s/service-account: <application service account>
     authn-k8s/authentication-container-name: authenticator
+
+# granting host access to authenticate using authn-k8s
+- !grant
+  role: !group conjur/authn-k8s/<authenticator id>/apps
+  member: !host app1
 ```
 
 To authenticate an entire namespace load the following policy:
@@ -19,6 +24,11 @@ To authenticate an entire namespace load the following policy:
   annotations:
     authn-k8s/namespace: <application namespace>
     authn-k8s/authentication-container-name: authenticator
+
+# granting host access to authenticate using authn-k8s
+- !grant
+  role: !group conjur/authn-k8s/<authenticator id>/apps
+  member: !host entire_namespace
 ```
 
 
