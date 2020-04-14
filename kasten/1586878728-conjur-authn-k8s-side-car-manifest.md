@@ -27,6 +27,11 @@ Add the following to the containers spec of the Deployment manifest:
             value: <conjur account>
           - name: CONJUR_AUTHN_LOGIN
             value: <conjur host e.g. host/app1>
+          - name: CONJUR_SSL_CERTIFICATE
+            valueFrom:
+              configMapKeyRef:
+                name: k8s-app-ssl
+                key: ssl-certificate
         volumeMounts:
           - mountPath: /run/conjur
             name: conjur-access-token
