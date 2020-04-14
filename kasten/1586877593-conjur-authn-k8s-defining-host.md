@@ -2,7 +2,7 @@
 #conjur #authn-k8s #host #policy
 
 A conjur `authn-k8s` host identifies a specific k8s resource.
-This host will repersent a specific service accounts from within a namespace
+This host will represent a specific service accounts from within a namespace
 ```yaml
 - !host
   id: app1
