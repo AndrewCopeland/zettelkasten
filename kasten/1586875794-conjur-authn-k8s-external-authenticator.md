@@ -112,3 +112,4 @@ Next step is to define a `host` within conjur that repersents a k8s resources.
 [????]
 
 ## Links
+- [1586877593-conjur-authn-k8s-defining-host.md](1586877593-conjur-authn-k8s-defining-host.md)
