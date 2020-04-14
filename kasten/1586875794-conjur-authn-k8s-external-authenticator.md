@@ -3,7 +3,7 @@
 
 When a follower is deployed externally from the k8s cluster the authn-k8s authenticator needs 3 more variables since it needs to connect to the k8s cluster and validate pods attempting to authenticate.
 
-Below if the policy that needs to be loaded to configure the external authn-k8s authenticator:
+Below is the policy that needs to be loaded to configure the external authn-k8s authenticator:
 ```yaml
 # root.yml
 - !policy
