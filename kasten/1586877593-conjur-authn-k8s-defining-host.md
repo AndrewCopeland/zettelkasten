@@ -31,6 +31,8 @@ To authenticate an entire namespace load the following policy:
   member: !host entire_namespace
 ```
 
+Now that the hosts have been loaded into conjur now we need to deploy the sidecar/init container to our application.
+
 
 
 ## Links
