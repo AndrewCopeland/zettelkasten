@@ -41,3 +41,4 @@ Add the following to the containers spec of the Deployment manifest:
 
 ## Links
 - [1586274452-conjur-authn-k8s.md](1586274452-conjur-authn-k8s.md)
+- [1586877593-conjur-authn-k8s-defining-host.md](1586877593-conjur-authn-k8s-defining-host.md)

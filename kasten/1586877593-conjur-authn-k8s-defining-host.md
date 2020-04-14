@@ -38,3 +38,4 @@ Now that the hosts have been loaded into conjur now we need to deploy the sideca
 ## Links
 - [1586274452-conjur-authn-k8s.md](1586274452-conjur-authn-k8s.md)
 - [1586875794-conjur-authn-k8s-external-authenticator.md](1586875794-conjur-authn-k8s-external-authenticator.md)
+- [1586878728-conjur-authn-k8s-side-car-manifest.md](1586878728-conjur-authn-k8s-side-car-manifest.md)
