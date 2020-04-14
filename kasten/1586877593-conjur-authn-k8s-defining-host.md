@@ -32,7 +32,7 @@ To authenticate an entire namespace load the following policy:
 ```
 
 Now that the hosts have been loaded into conjur now we need to deploy the sidecar/init container to our application.
-
+[Example sidecar/init container manifest](1586878728-conjur-authn-k8s-side-car-manifest.md)
 
 
 ## Links
