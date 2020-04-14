@@ -30,7 +30,7 @@ Now that the authenticator is configured lets enable the authenticator by execut
 docker exec <dap follower container name> \
     chpst -u conjur conjur-plugin-service possum \
     rake authn_k8s:ca_init["conjur/authn-k8s/k8s-cluster-1"]
-evoke variable set CONJUR_AUTHENTICATORS=authn,authn-k8s/k8s-cluster-1
+evoke variable set CONJUR_AUTHENTICATORS authn,authn-k8s/k8s-cluster-1
 ```
 
 Next is to create a k8s service account that has the needed permissions for the `authn-k8s` to authenticate pods:
@@ -79,7 +79,7 @@ Load the manifest by running:
 kubectl create -f authn-k8s-service-account.yml
 ```
 
-Now that we have created the service accounts, now lets retrieve the needed variables using the `kubectl` command:
+Now that we have created the service accounts, lets retrieve the needed variables using the `kubectl` command:
 ```bash
 # obtain the service account token secret
 TOKEN_SECRET_NAME="$(kubectl get secrets -n default\
