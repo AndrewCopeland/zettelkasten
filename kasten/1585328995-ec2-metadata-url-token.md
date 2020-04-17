@@ -6,10 +6,11 @@ To obtain the IAM role associated with this EC2 instance perform the following:
 curl http://169.254.169.254/latest/meta-data/iam/security-credentials/
 ```
 
-To obtain the access key, secret key and token for this iam user:
+To obtain the access key, secret access key and token for this iam user:
 ```bash
 curl http://169.254.169.254/latest/meta-data/iam/security-credentials/<iam role name>
 ```
 
 ## Links
 - [1584721584-conjur-authn-iam.md](1584721584-conjur-authn-iam.md)
+- [1586469583-aws-eks-iam-roles-with-service-accounts.md](1586469583-aws-eks-iam-roles-with-service-accounts.md)
