@@ -33,7 +33,7 @@ So given this policy:
     roles:
     - !group encrypt
     - !group decrypt
-   member: !group all
+    member: !group all
 
 # host that will use eaas
 - !host use-eaas
