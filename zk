@@ -425,7 +425,7 @@ function search_content() {
 
 function list() {
   set +e
-  find $ZETTELKASTEN_DIR -type f -exec basename {} \;
+  find $ZETTELKASTEN_DIR -type f -exec basename {} \; | sort
   set -e
 }
 
