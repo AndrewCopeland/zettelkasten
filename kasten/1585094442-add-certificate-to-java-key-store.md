@@ -2,7 +2,7 @@
 #java #self-signed #cert #keystore
 
 ```bash
-keytool -import -trustcacerts -alias <alias name> -keystore /Library/Java/JavaVirtualMachines/jdk1.8.0_231.jdk/Contents/Home/jre/lib/security/cacerts -file <certificate as pem>
+keytool -import -trustcacerts -alias <alias name> -keystore <java home>/jre/lib/security/cacerts -file <certificate as pem>
 ```
 
 ## Links
