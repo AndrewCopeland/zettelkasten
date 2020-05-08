@@ -7,7 +7,7 @@ VCSS006# - Failed to initialize conjur client with exception of type VaultConjur
 ```
 
 Solution:
-1. 
+1. [Reset the Conjur public certificate](1587149181-cyberark-conjur-vault-sync-reset-cert.md) 
 
 
 ## Links
