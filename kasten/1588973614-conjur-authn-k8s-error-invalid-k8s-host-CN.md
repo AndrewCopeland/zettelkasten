@@ -9,6 +9,6 @@ Authentication Error: #<ArgumentError: Invalid K8s host CN: host.nexus-member. M
 ```
 
 ## Solution
-1. Looks like this error can be returned if using `authn-k8s` annotation authentication, to resolve this issue you can upgrade Conjur or use the old way of defining `authn-k8s` hosts. e.g. 'conjur/authn-k8s/<serviceId>/apps/<namespace>/<resource type>/<resource name>'
+1. Looks like this error can be returned if using `authn-k8s` annotation authentication, to resolve this issue you can upgrade Conjur or use the old way of defining `authn-k8s` hosts. e.g. `conjur/authn-k8s/<serviceId>/apps/<namespace>/<resource type>/<resource name>`
 
 ## Links
