@@ -53,3 +53,4 @@ Save-Certificate -serverUri "https://<conjur master hostname>/info" -certPath "C
 The new certificate will be retrieved from the conjur master and will be loaded in the `LocalMachine\Root` certificate store.
 Now restart the Vault Conjur Syncronizer service.
 ## Links
+- [1588949676-cyberark-conjur-sync-unable-to-detect-conjur-server-version.md](1588949676-cyberark-conjur-sync-unable-to-detect-conjur-server-version.md)

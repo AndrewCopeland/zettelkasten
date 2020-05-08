@@ -11,3 +11,4 @@ Solution:
 
 
 ## Links
+- [1587149181-cyberark-conjur-vault-sync-reset-cert.md](1587149181-cyberark-conjur-vault-sync-reset-cert.md)
