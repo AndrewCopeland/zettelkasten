@@ -33,3 +33,4 @@ conjur variable values add conjur/authn-k8s/$AUTHENTICATOR_ID/ca/cert "$(cat ca.
 
 
 ## Links
+- [1588967425-conjur-enable-authn-k8s-required-key-not-available.md](1588967425-conjur-enable-authn-k8s-required-key-not-available.md)
