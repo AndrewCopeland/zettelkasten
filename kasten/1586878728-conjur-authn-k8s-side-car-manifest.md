@@ -35,6 +35,10 @@ Add the following to the containers spec of the Deployment manifest:
         volumeMounts:
           - mountPath: /run/conjur
             name: conjur-access-token
+      volumes:
+        - name: conjur-access-token
+          emptyDir:
+            medium: Memory
 ```
 
 
