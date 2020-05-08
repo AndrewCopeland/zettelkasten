@@ -13,6 +13,9 @@ Searching conjur keyring for key possum
 keyctl_search: Required key not available
 ```
 
+### Solution
+1. [Generate certificate and load secrets manually](1588967540-conjur-authn-k8s-manually-generating-certificates.md)
+
 
 ## Links
 - [1588967540-conjur-authn-k8s-manually-generating-certificates.md](1588967540-conjur-authn-k8s-manually-generating-certificates.md)
