@@ -12,3 +12,4 @@ Solution:
 
 ## Links
 - [1587149181-cyberark-conjur-vault-sync-reset-cert.md](1587149181-cyberark-conjur-vault-sync-reset-cert.md)
+- [1587142600-cyberark-conjur-vault-sync-install.md](1587142600-cyberark-conjur-vault-sync-install.md)
