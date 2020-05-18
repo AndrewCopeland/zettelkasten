@@ -62,3 +62,4 @@ curl -H "<conjur access token>" -X POST --data '{"assume-iam-role": "s3-bucket-i
 ```
 
 ## Links
+- [1587138955-conjur-component-config.md](1587138955-conjur-component-config.md)

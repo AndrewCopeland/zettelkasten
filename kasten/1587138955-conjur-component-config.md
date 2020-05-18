@@ -72,3 +72,4 @@ curl -H "${CONJUR_HEADER}" --data "DATA I NEED ENCRYPTED" <conjur component>/v1/
 ```
 
 ## Links
+- [1589824045-conjur-component-assume-iam-role.md](1589824045-conjur-component-assume-iam-role.md)
