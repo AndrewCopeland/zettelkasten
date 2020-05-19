@@ -19,42 +19,48 @@ Configure the `assume-iam-role` webservice:
   owner: !host assume-iam-role-component
   body:
   - !webservice
-  - !group
-  - !permit
-    role: !group
-    resource: !webservice
-    privileges: [ read, assume ]
   - !variable iam-user-name
   - !variable iam-user-access-key
   - !variable iam-user-secret-access-key
+  - !group
+
+  # use the webservice '/assumeIamRole' endpoint
+  - !permit
+    role: !group
+    resource: !webservice
+    privileges: [ read, assumeIamRole ]
+
+  # create a group that can only assume one iam role
+  - !group 77394949373763/iam-role-name
+  - !grant
+    role: !group
+    member: !group 77394949373763/iam-role-name
+  - !permit
+    role: !group 77394949373763/iam-role-name
+    resource: !webservice
+    privileges: [ 77394949373763/iam-role-name ]
 ```
 
 - `!host assume-iam-role-component` will be the identity of the component
-- `!webservice assume-iam-role` will repersent the webservice
-- `!variable iam-user-name` will repersent the iam user    
+- `!webservice assume-iam-role` will represent the webservice
+- `!variable iam-user-name` will represent the iam user    
 - `!variable iam-user-access-key` will be the iam users access key
 - `!variable iam-user-secret-access-key` will be the iam users secret access key
 - The above variables will be used to assume specific IAM roles and those IAM role credentials will be returned
 
 Configure an application to assume a specific IAM role
 ```yaml
-- !host app1
+- !host client
 
-# give host ability to use the assume endpoint
+# give host ability to use the assume endpoint for a specific role
 - !grant
-  role: !group assume-iam-role
-  member: !host app1
-
-# give host ability to assume a specific iam role 's3-bucket-iam-role-name'
-- !permit
-  role: !host app1
-  resource: !webservice assume-iam-role
-  privileges: [ s3-bucket-iam-role-name ]
+  role: !group assume-iam-role/77394949373763/iam-role-name
+  member: !host client
 ```
 
-Now the `!host app1` will the ability to hit the conjur component to assume the iam role of `s3-bucket-iam-role-name` using the curl command below:
+Now the `!host client` will the ability to request the conjur component to assume the iam role of `iam-role-name` for aws account `77394949373763` using the curl command below:
 ```bash
-curl -H "<conjur access token>" -X POST --data '{"assume-iam-role": "s3-bucket-iam-role-name"}' https://conjur-assume-iam-role/assume
+curl -H "<conjur access token>" https://conjur-assume-iam-role/assumeIamRole/77394949373763/iam-role-name
 {
 <AWS CREDENTIAL CONTENT>
 }
