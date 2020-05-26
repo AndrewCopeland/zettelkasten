@@ -1,7 +1,7 @@
 # 1587149181 cyberark-conjur-vault-sync-reset-cert
 #cyber #conjur #syncronizer #certificate
 
-To reset the conjur certificate on the Vault Conjur Syncronizer service open a powershell console with Administrator privileges. Then copy and paste this function into the powershell console:
+To reset the Conjur certificate on the CyberArk Vault Synchronizer service, open a PowerShell console with Administrator privileges. Then copy and paste this function into the PowerShell console:
 
 ```powershell
 function Save-Certificate($serverUri, $certPath)
@@ -45,12 +45,14 @@ function Save-Certificate($serverUri, $certPath)
 }
 ```
 
-And then execute this function by running:
+Then execute this function by running:
 ```powershell
 Save-Certificate -serverUri "https://<conjur master hostname>/info" -certPath "C:\Program Files\Cyberark\Syncronizer\conjur.pem"
 ```
 
-The new certificate will be retrieved from the conjur master and will be loaded in the `LocalMachine\Root` certificate store.
-Now restart the Vault Conjur Syncronizer service.
+The new certificate is retrieved from the Master and is loaded in the `LocalMachine\Root` certificate store.
+
+Restart the CyberArk Vault Synchronizer service.
+
 ## Links
 - [1588949676-cyberark-conjur-sync-unable-to-detect-conjur-server-version.md](1588949676-cyberark-conjur-sync-unable-to-detect-conjur-server-version.md)
