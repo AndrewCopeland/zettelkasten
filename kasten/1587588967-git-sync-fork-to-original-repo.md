@@ -17,6 +17,11 @@ Make sure you are on your forks desired branch:
 git checkout <branch>
 ```
 
+Now merge the upstream with your fork:
+```bash
+git merge upstream/master
+```
+
 Now the local branch is synced with the original repo master branch, all that needs to be done now is to push the changes to your forked repo in github:
 ```bash
 git push
