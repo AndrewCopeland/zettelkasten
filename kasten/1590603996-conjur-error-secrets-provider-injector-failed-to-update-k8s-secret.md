@@ -10,7 +10,7 @@ ERROR: 2020/05/27 17:01:33 provide_conjur_secrets.go:88: CSPFK023E Failed to upd
 ```
 
 ## Solutions
-- [Update the k8s RBAC that service account can update a k8s secret](1590604046-conjur-solution-secrets-provider-injector-failed-to-update-k8s-secret.md)
+- [Update the k8s RBAC so service account can update a k8s secret](1590604046-conjur-solution-secrets-provider-injector-failed-to-update-k8s-secret.md)
 
 ## Links
 - [1590604046-conjur-solution-secrets-provider-injector-failed-to-update-k8s-secret.md](1590604046-conjur-solution-secrets-provider-injector-failed-to-update-k8s-secret.md)
