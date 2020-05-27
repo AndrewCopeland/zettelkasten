@@ -19,7 +19,7 @@ metadata:
 rules:
   - apiGroups: [""]
     resources: ["secrets"]
-    verbs: [ "get", "patch" ]
+    verbs: [ "get", "update" ]
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
