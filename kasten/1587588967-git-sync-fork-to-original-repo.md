@@ -3,7 +3,7 @@
 
 ## Add the original repo as an upstream directory
 ```bash
-git remote add upstream https://github.com/<orginal owner>/<orginal repo>.git
+git remote add upstream https://github.com/<original owner>/<original repo>.git
 ```
 
 ## How to merge the original repo into your fork
