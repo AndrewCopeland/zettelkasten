@@ -1,5 +1,5 @@
 # 1590603996 conjur-error-secrets-provider-injector-failed-to-update-k8s-secret
-# conjur #error #injector #secrets-provder #k8s
+#conjur #error #injector #secrets-provder #k8s
 
 Thiss relates to using the conjur cyberark secrets provider for k8s. The docker image can be found [here](https://hub.docker.com/r/cyberark/secrets-provider-for-k8s/tags)
 
