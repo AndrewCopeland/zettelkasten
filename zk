@@ -32,6 +32,7 @@ Commands:
   rml, rm-link      Remove a link between 2 zettels
   home              Display zettelkasten home directory
   init              Initialize the $HOME/.zettelkasten
+  variables         List all variables defined in $HOME/.zettelkasten
 END
 )
 
@@ -429,6 +430,10 @@ function list() {
   set -e
 }
 
+function variables() {
+  cat $HOME/.zettelkasten
+}
+
 function main() {
   action="${1}"
 
@@ -511,6 +516,10 @@ function main() {
 
     "home")
       home "$2"
+      ;;
+
+    "variables")
+      variables
       ;;
 
     *)
