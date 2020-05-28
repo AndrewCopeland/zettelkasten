@@ -490,7 +490,7 @@ function main() {
       open_browser "$2"
       ;;
 
-    "link" | "l")
+    "link" | "ln")
       link "$2" "$3"
       ;;
 
