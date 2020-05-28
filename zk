@@ -34,6 +34,7 @@ Commands:
   init              Initialize the $HOME/.zettelkasten
   variables         List all variables defined in $HOME/.zettelkasten
   add, add-media    Add specific media (images, music, pdf, etc) to kasten
+  lsm, list-media   List all media zettels
 END
 )
 
@@ -107,7 +108,7 @@ function git_push() {
   if [[ "$ZETTELKASTEN_AUTO_GIT_PUSH" == "yes" ]]; then
     cwd=$(pwd)
     cd "$ZETTELKASTEN_DIR"
-    echo "$1" > /dev/tty
+    # echo "$1" > /dev/tty
     git add ${@:2}
     git commit -m "$1" --quiet
     git push --quiet
@@ -264,8 +265,11 @@ function add_media() {
   now=$(get_datestamp)
 
   media_zettel_name=".${now}-${basename}"
-  cp "${media_file_path}" "${ZETTELKASTEN_DIR}/$media_zettel_name"
-  echo_green "Added zettel media '${media_zettel_name}'"
+  media_fname="${ZETTELKASTEN_DIR}/${media_zettel_name}"
+
+  cp "${media_file_path}" "${media_fname}"
+  git_push "added zettel media ${media_zettel_name}" "${media_fname}"
+  echo_green "added zettel media '${media_zettel_name}'"
 }
 
 function open_editor() {
@@ -437,6 +441,7 @@ function remove() {
   zettel=$(find_zettel "$search_fields" || exit)
   rm -f "$ZETTELKASTEN_DIR/$zettel"
   git_push "removing zettel $zettel" "$zettel"
+  echo_green "removed zettel $zettel"
 }
 
 function find_tag() {
@@ -453,6 +458,12 @@ function search_content() {
 function list() {
   set +e
   find $ZETTELKASTEN_DIR -type f -exec basename {} \; | sort | grep "^[^.]"
+  set -e
+}
+
+function list_media() {
+  set +e
+  find $ZETTELKASTEN_DIR -type f -exec basename {} \; | sort | grep "^\."
   set -e
 }
 
@@ -550,6 +561,10 @@ function main() {
 
     "add-media" | "add")
       add_media "$2"
+      ;;
+
+    "list-media" | "lsm")
+      list_media
       ;;
 
     *)
