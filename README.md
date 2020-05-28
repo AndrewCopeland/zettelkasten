@@ -42,6 +42,8 @@ Commands:
   home              Display zettelkasten home directory
   init              Initialize the $HOME/.zettelkasten
   variables         List all variables defined in $HOME/.zettelkasten
+  add, add-media    Add specific media (images, music, pdf, etc) to kasten
+  lsm, list-media   List all media zettels
 ```
 
 To create a zettel perform the following. This will open up vi and once you are done save the zettel.
