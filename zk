@@ -421,7 +421,7 @@ function find_tag() {
 
 function search_content() {
   sub_string="${1}"
-  $ZETTELKASTEN_BASENAME_COMMAND $(grep -rnl "$ZETTELKASTEN_DIR" -e "${sub_string}")
+  $ZETTELKASTEN_BASENAME_COMMAND $(grep -rnl "$ZETTELKASTEN_DIR" -e "${sub_string}") | sort
 }
 
 function list() {
