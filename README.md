@@ -37,10 +37,11 @@ Commands:
   s, search         Search for a sub string within all zettels
   ls, list          List all zettels
   rm, remove        Remove a zettel
-  l, link           Link 2 zettels together
+  ln, link          Link 2 zettels together
   rml, rm-link      Remove a link between 2 zettels
   home              Display zettelkasten home directory
   init              Initialize the $HOME/.zettelkasten
+  variables         List all variables defined in $HOME/.zettelkasten
 ```
 
 To create a zettel perform the following. This will open up vi and once you are done save the zettel.
