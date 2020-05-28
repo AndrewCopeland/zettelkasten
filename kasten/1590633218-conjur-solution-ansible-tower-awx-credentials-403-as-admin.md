@@ -7,3 +7,4 @@ The solution is to log into AWS/Ansible Tower as the admin user since he is the 
 
 
 ## Links
+- [1590633134-conjur-error-ansible-tower-awx-credentials-403.md](1590633134-conjur-error-ansible-tower-awx-credentials-403.md)

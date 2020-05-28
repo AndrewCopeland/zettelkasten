@@ -11,3 +11,4 @@ When attempting to `Test` the Conjur credential. I recieve the following error i
 
 
 ## Links
+- [1590633218-conjur-solution-ansible-tower-awx-credentials-403-as-admin.md](1590633218-conjur-solution-ansible-tower-awx-credentials-403-as-admin.md)
