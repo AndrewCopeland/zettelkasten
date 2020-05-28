@@ -33,6 +33,7 @@ Commands:
   home              Display zettelkasten home directory
   init              Initialize the $HOME/.zettelkasten
   variables         List all variables defined in $HOME/.zettelkasten
+  add, add-media    Add specific media (images, music, pdf, etc) to kasten
 END
 )
 
@@ -248,6 +249,25 @@ function new_editor() {
   editor_clean_up "${zettel}"
 }
 
+function add_media() {
+  media_file_path="${1}"
+
+  usage="usage: $0 add-media <media file path>"
+  error_message="Media file path not provided"
+  validate_mandatory_parameter "${media_file_path}" "${usage}" "${error_message}"
+
+  if [ ! -f "${media_file_path}" ]; then
+    fail "'${media_file_path}' is not a valid file path!"
+  fi
+
+  basename=$($ZETTELKASTEN_BASENAME_COMMAND $(echo "${media_file_path}"))
+  now=$(get_datestamp)
+
+  media_zettel_name=".${now}-${basename}"
+  cp "${media_file_path}" "${ZETTELKASTEN_DIR}/$media_zettel_name"
+  echo_green "Added zettel media '${media_zettel_name}'"
+}
+
 function open_editor() {
   editor="${1}"
   search_fields="${2}"
@@ -289,9 +309,15 @@ function link() {
 
   from_fname=$(find_zettel "$from_link")
   to_fname=$(find_zettel "$to_link")
-
-  echo "- [$from_fname]($from_fname)" >> "$ZETTELKASTEN_DIR/$to_fname"
-  echo "- [$to_fname]($to_fname)" >> "$ZETTELKASTEN_DIR/$from_fname"
+  
+  # if file starts with '.' then assume it is media and it is not possible
+  # to create link on a media file
+  if [[ "$to_fname" != .* ]]; then
+    echo "- [$from_fname]($from_fname)" >> "$ZETTELKASTEN_DIR/$to_fname"
+  fi
+  if [[ "$from_fname" != .* ]]; then
+    echo "- [$to_fname]($to_fname)" >> "$ZETTELKASTEN_DIR/$from_fname"
+  fi
 
   git_push \
     "added link between $from_fname and $to_fname" \
@@ -520,6 +546,10 @@ function main() {
 
     "variables")
       variables
+      ;;
+
+    "add-media" | "add")
+      add_media "$2"
       ;;
 
     *)
