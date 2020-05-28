@@ -421,12 +421,12 @@ function find_tag() {
 
 function search_content() {
   sub_string="${1}"
-  $ZETTELKASTEN_BASENAME_COMMAND $(grep -rnl "$ZETTELKASTEN_DIR" -e "${sub_string}") | sort
+  $ZETTELKASTEN_BASENAME_COMMAND $(grep -rnl "$ZETTELKASTEN_DIR" -e "${sub_string}") | sort | grep "^[^.]"
 }
 
 function list() {
   set +e
-  find $ZETTELKASTEN_DIR -type f -exec basename {} \; | sort
+  find $ZETTELKASTEN_DIR -type f -exec basename {} \; | sort | grep "^[^.]"
   set -e
 }
 
