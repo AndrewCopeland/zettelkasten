@@ -1,6 +1,8 @@
 # zettelkasten
 A note taking application following the Zettelkasten method.
 
+You can find my personal zettel kasten [here](https://github.com/AndrewCopeland/my-zettelkasten)
+
 ## Installation
 ```bash
 curl -s -o /usr/local/bin/zk https://raw.githubusercontent.com/AndrewCopeland/zettelkasten/master/zk && chmod +x /usr/local/bin/zk
