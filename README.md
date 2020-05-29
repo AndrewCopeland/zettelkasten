@@ -8,7 +8,7 @@ curl -s -o /usr/local/bin/zk https://raw.githubusercontent.com/AndrewCopeland/ze
 
 ## Getting started
 To initialize the zettelkasten config just run `zk init`.
-```bash
+```
 $ zk init
 Zettelkasten Directory: /Users/acopeland/git/AndrewCopeland/zettelkasten/kasten
 Zettelkasten auto git push[yes/no]: no
