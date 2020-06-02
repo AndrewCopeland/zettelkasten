@@ -473,6 +473,11 @@ function variables() {
   cat $HOME/.zettelkasten
 }
 
+function random() {
+  zettel=$(ls $ZETTELKASTEN_DIR | sort -R | head -n 1)
+  open_browser "${zettel}"
+}
+
 function main() {
   action="${1}"
 
@@ -571,6 +576,10 @@ function main() {
 
     "sync")
       sync_zettelkasten
+      ;;
+
+    "random")
+      random
       ;;
 
     *)
