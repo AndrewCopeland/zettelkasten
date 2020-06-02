@@ -459,9 +459,7 @@ function search_content() {
 }
 
 function list() {
-  set +e
-  find $ZETTELKASTEN_DIR -type f -exec basename {} \; | sort | grep "^[^.]"
-  set -e
+  ls $ZETTELKASTEN_DIR | grep "^[^.]"
 }
 
 function list_media() {
