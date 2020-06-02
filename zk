@@ -452,7 +452,10 @@ function find_tag() {
 
 function search_content() {
   sub_string="${1}"
-  $ZETTELKASTEN_BASENAME_COMMAND $(grep -rnl "$ZETTELKASTEN_DIR" -e "${sub_string}") | sort | grep "^[^.]"
+  result=$(grep -rnl "$ZETTELKASTEN_DIR" -e "${sub_string}" | sort | grep "^[^.]")
+  if [[ ! -z $result ]]; then
+    $ZETTELKASTEN_BASENAME_COMMAND $(echo "$result")
+  fi
 }
 
 function list() {
@@ -489,7 +492,7 @@ function main() {
   validate_dir_is_git_repo "${ZETTELKASTEN_DIR}"
 
   # perform zettel actions
-  sync_zettelkasten &>/dev/null
+  # sync_zettelkasten &>/dev/null
   case $action in
     "new" | "n")
       new_editor "${ZETTELKASTEN_DEFAULT_TEXT_EDITOR}" "${@:2}"
@@ -565,6 +568,10 @@ function main() {
 
     "list-media" | "lsm")
       list_media
+      ;;
+
+    "sync")
+      sync_zettelkasten
       ;;
 
     *)
