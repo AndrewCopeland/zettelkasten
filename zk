@@ -40,7 +40,7 @@ END
 
 function new_zettel_default() {
   zettel_title="$1"
-  default_tags="#exampletag"
+  default_tags=""
   zettel_template=$(cat <<-END
 $zettel_title
 $default_tags
@@ -88,7 +88,7 @@ function find_zettel() {
 
   # look for the zettel
   set +e
-  zettels=$(find $ZETTELKASTEN_DIR  -type f -exec basename {} \; | grep -e "$search_fields")
+  zettels=$(ls $ZETTELKASTEN_DIR | grep -e "$search_fields")
   set -e
 
   # validate only 1 zettel was retutned
@@ -443,6 +443,8 @@ function remove() {
   git_push "removing zettel $zettel" "$zettel"
   echo_green "removed zettel $zettel"
 }
+
+
 
 function find_tag() {
   tag="${1}"
