@@ -106,6 +106,7 @@ function find_zettel() {
 }
 
 function git_push() {
+  sync_zettelkasten
   if [[ "$ZETTELKASTEN_AUTO_GIT_PUSH" == "yes" ]]; then
     cwd=$(pwd)
     cd "$ZETTELKASTEN_DIR"
