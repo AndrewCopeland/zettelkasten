@@ -35,6 +35,7 @@ Commands:
   oe, open-emacs    Open an existing zettel in emacs
   oc, open-code     Open an existing zettel in Visual Studio Code
   ob, open-browser  Open an existing zettel in github using OS default browser
+  c, cat            Print an existing zettel to terminal
   t, tag            Search zettels for a specific tag
   s, search         Search for a sub string within all zettels
   ls, list          List all zettels
