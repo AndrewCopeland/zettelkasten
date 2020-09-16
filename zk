@@ -82,15 +82,20 @@ function list_zettels() {
 function find_zettel() {
   # validate search field were procided and create search fields for grep
   search_fields="$1"
+  search_media="${2:-no}"
   if [[ -z "$search_fields" ]];then
-     list_zettels
+    list_zettels
     fail "Could not find a zettel because search fields were not provided"
   fi
   search_fields=$(echo "$search_fields" | sed 's/ /|/g' | sed 's/,/|/g')
 
   # look for the zettel
   set +e
-  zettels=$(ls $ZETTELKASTEN_DIR | grep -e "$search_fields")
+  if [ "$search_media" == "yes" ]; then
+    zettels=$(ls -a $ZETTELKASTEN_DIR | grep -e "$search_fields")
+  else
+    zettels=$(ls $ZETTELKASTEN_DIR | grep -e "$search_fields")
+  fi
   set -e
 
   # validate only 1 zettel was retutned
@@ -314,8 +319,8 @@ function link() {
   validate_mandatory_parameter "${from_link}" "${usage}" "Empty from_link parameter"
   validate_mandatory_parameter "${to_link}" "${usage}" "Empty to_link parameter"
 
-  from_fname=$(find_zettel "$from_link")
-  to_fname=$(find_zettel "$to_link")
+  from_fname=$(find_zettel "$from_link" "yes")
+  to_fname=$(find_zettel "$to_link" "yes")
   
   # if file starts with '.' then assume it is media and it is not possible
   # to create link on a media file
@@ -435,6 +440,13 @@ function init() {
 function sync_zettelkasten() {
   if [[ "$ZETTELKASTEN_AUTO_GIT_PUSH" == "yes" ]]; then
     cd $ZETTELKASTEN_DIR && git pull
+    # after performing a git pull push all files that have been left behind
+    # this should not need to be done but currently every once and a while a zettel is not pushed
+    # after it has been created
+    # untrackedFiles=$(cd $ZETTELKASTEN_DIR && git status -s || awk '{print $2}')
+    # for file in $untrackedFiles; do
+    #   cd $ZETTELKASTEN_DIR && git_push "Added zettel ${file}" "${file}"
+    # done
   fi
 }
 
