@@ -461,7 +461,7 @@ function remove() {
 
 function find_tag() {
   tag="${1}"
-  tag="#${tag} "
+  tag="#${tag}\s"
   search_content "${tag}"
 }
 
