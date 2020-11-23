@@ -24,6 +24,7 @@ Commands:
   oe, open-emacs    Open an existing zettel in emacs
   oc, open-code     Open an existing zettel in Visual Studio Code
   ob, open-browser  Open an existing zettel in github using OS default browser
+  p, push           Push notes to GitHub
   c, cat            Print an existing zettel to terminal
   t, tag            Search zettels for a specific tag
   s, search         Search for a sub string within all zettels
@@ -310,6 +311,16 @@ function open_browser() {
   $ZETTELKASTEN_BROWSER_COMMAND "https://github.com/$github_endpoint/tree/master/$ZETTELKASTEN_GIT_DIR/$zettel"
 }
 
+function push() {
+    cwd=$(pwd)
+    cd "$ZETTELKASTEN_DIR"
+    msg="Regenerated at $(date -u '+%Y-%m-%d %H:%M:%S') UTC"
+    git add .
+    git commit -m "$msg"
+    git push --quiet
+    cd "$cwd";
+}
+
 function link() {
   from_link=$1
   to_link=$2
@@ -547,7 +558,11 @@ function main() {
     "open-browser" | "ob")
       open_browser "$2"
       ;;
-    
+
+    "push" | "p")
+      push
+      ;;
+
     "cat" | "c")
       open_editor "cat" "$2"
       ;;
