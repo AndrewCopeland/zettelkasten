@@ -24,7 +24,7 @@ Commands:
   oe, open-emacs    Open an existing zettel in emacs
   oc, open-code     Open an existing zettel in Visual Studio Code
   ob, open-browser  Open an existing zettel in github using OS default browser
-  p, push           Push notes to GitHub
+  p, push           Push zettels to GitHub
   c, cat            Print an existing zettel to terminal
   t, tag            Search zettels for a specific tag
   s, search         Search for a sub string within all zettels
@@ -314,7 +314,7 @@ function open_browser() {
 function push() {
     cwd=$(pwd)
     cd "$ZETTELKASTEN_DIR"
-    msg="Regenerated at $(date -u '+%Y-%m-%d %H:%M:%S') UTC"
+    msg="Regenerated at $(get_datestamp)"
     git add .
     git commit -m "$msg"
     git push --quiet
