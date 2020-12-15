@@ -502,7 +502,18 @@ function variables() {
 function update() {
   SOURCE_PATH="/usr/local/bin/zk"
   SOURCE_URL="https://raw.githubusercontent.com/AndrewCopeland/zettelkasten/master/zk"
-  curl --fail -s -o $SOURCE_PATH $SOURCE_URL && chmod +x $SOURCE_PATH
+  current_zk_hash=$(cat $SOURCE_PATH | $ZETTELKASTEN_MD5_COMMAND)
+  latest_zk=$(curl --fail -s $SOURCE_URL)
+  latest_zk_hash=$(echo "${latest_zk}" | $ZETTELKASTEN_MD5_COMMAND)
+
+  if [ "${current_zk_hash}" = "${latest_zk_hash}" ]; then
+    echo_yellow "Latest '$SOURCE_PATH' script is already installed"
+    exit 0
+  fi
+
+  echo "${latest_zk}" > $SOURCE_PATH
+  chmod +x $SOURCE_PATH
+
   echo_green "Successfully updated '$SOURCE_PATH' to the latest version"
 }
 
