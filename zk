@@ -517,7 +517,7 @@ function main() {
   # if action is init create the ~/.zettelkasten config file and exit
   if [ "${action}" = "init" ]; then
     init
-    exit 1
+    exit 0
   fi
   # if config does not exist then prompt user to run 'zk init'
   if [ ! -f "${zk_config}" ]; then
