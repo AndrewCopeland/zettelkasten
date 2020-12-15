@@ -46,6 +46,7 @@ Commands:
   home              Display zettelkasten home directory
   init              Initialize the $HOME/.zettelkasten
   variables         List all variables defined in $HOME/.zettelkasten
+  update            Update to latest zk script
   add, add-media    Add specific media (images, music, pdf, etc) to kasten
   lsm, list-media   List all media zettels
   sync              Sync local zettelkasten with git zettelkasten

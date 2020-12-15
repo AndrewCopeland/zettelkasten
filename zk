@@ -35,6 +35,7 @@ Commands:
   home              Display zettelkasten home directory
   init              Initialize the $HOME/.zettelkasten
   variables         List all variables defined in $HOME/.zettelkasten
+  update            Update to latest zk script
   add, add-media    Add specific media (images, music, pdf, etc) to kasten
   lsm, list-media   List all media zettels
   sync              Sync local zettelkasten with git zettelkasten
@@ -498,6 +499,13 @@ function variables() {
   cat $HOME/.zettelkasten
 }
 
+function update() {
+  SOURCE_PATH="/usr/local/bin/zk"
+  SOURCE_URL="https://raw.githubusercontent.com/AndrewCopeland/zettelkasten/master/zk"
+  curl --fail -s -o $SOURCE_PATH $SOURCE_URL && chmod +x $SOURCE_PATH
+  echo_green "Successfully updated '$SOURCE_PATH' to the latest version"
+}
+
 function random() {
   zettel=$(ls $ZETTELKASTEN_DIR | sort -R | head -n 1)
   open_browser "${zettel}"
@@ -597,6 +605,10 @@ function main() {
 
     "variables")
       variables
+      ;;
+
+    "update")
+      update
       ;;
 
     "add-media" | "add")
