@@ -298,6 +298,25 @@ function open_editor() {
   editor_clean_up "${zettel}"
 }
 
+function open_media() {
+  zettel="${1}"
+  open "$ZETTELKASTEN_DIR/${zettel}"
+}
+
+function open_command() {
+  editor="${1}"
+  search_fields="${2}"
+
+  # if found zettel starts with '.' then open as if it were media
+  zettel=$(find_zettel "$search_fields" "yes" || exit)
+  if [[ "$zettel" == .* ]]; then
+    open_media "${zettel}"
+    exit 0
+  fi
+
+  open_editor "${editor}" "${search_fields}"
+}
+
 function open_browser() {
   search_fields="$1"
   zettel=$(find_zettel "$search_fields" || exit)
@@ -559,7 +578,7 @@ function main() {
       ;;
 
     "open" | "o")
-      open_editor "${ZETTELKASTEN_DEFAULT_TEXT_EDITOR}" "${2}"
+      open_command "${ZETTELKASTEN_DEFAULT_TEXT_EDITOR}" "${2}"
       ;;
 
     "open-vi" | "ov")
