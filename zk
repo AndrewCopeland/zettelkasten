@@ -319,7 +319,7 @@ function open_command() {
 
 function open_browser() {
   search_fields="$1"
-  zettel=$(find_zettel "$search_fields" || exit)
+  zettel=$(find_zettel "$search_fields" "yes" || exit)
   remote_url=$(cd $ZETTELKASTEN_DIR && git config --get remote.origin.url)
   # if remote_url contains a @ that means the repo was cloned using ssh key
   if [[ "$remote_url" = *"@"* ]]; then
