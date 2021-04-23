@@ -39,6 +39,7 @@ Commands:
   add, add-media    Add specific media (images, music, pdf, etc) to kasten
   lsm, list-media   List all media zettels
   sync              Sync local zettelkasten with git zettelkasten
+  ui                Launch the zk-ui from github.com/AndrewCopeland/zk-ui
 END
 )
 
@@ -541,6 +542,22 @@ function random() {
   open_browser "${zettel}"
 }
 
+function ui() {
+  GITHUB_URL="https://github.com/AndrewCopeland/zk-ui.git"
+  cwd=$(pwd)
+  cd /tmp
+  rm -rf ./zk-ui
+  git clone "$GITHUB_URL"
+  cd zk-ui
+  python3 -m venv venv
+  source venv/bin/activate
+  pip install -r requirements.txt
+  python serve.py & > logs.txt
+  cd "$cwd"
+
+  $ZETTELKASTEN_BROWSER_COMMAND "http://localhost:5000"
+}
+
 function main() {
   action="${1}"
 
@@ -655,6 +672,10 @@ function main() {
 
     "random")
       random
+      ;;
+
+    "ui")
+      ui
       ;;
 
     *)
