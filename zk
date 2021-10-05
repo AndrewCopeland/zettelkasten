@@ -272,6 +272,14 @@ function add_media() {
     fail "'${media_file_path}' is not a valid file path!"
   fi
 
+  # If file is larger than 100MB and we are pushing to git then fail because of github limitations
+  if [[ "$ZETTELKASTEN_AUTO_GIT_PUSH" == "yes" ]]; then
+    sizeKB=$(du -k "${media_file_path}" | awk '{print $1}')
+    if [ "$sizeKB" -gt "99000" ]; then
+      fail "'${media_file_path}' is larger than 100MB and cannot be added to github"
+    fi
+  fi
+
   basename=$($ZETTELKASTEN_BASENAME_COMMAND $(echo "${media_file_path}"))
   now=$(get_datestamp)
 
