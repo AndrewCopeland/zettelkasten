@@ -38,6 +38,7 @@ Commands:
   update            Update to latest zk script
   add, add-media    Add specific media (images, music, pdf, etc) to kasten
   lsm, list-media   List all media zettels
+  rmm, remove-media Remove a specific media file
   sync              Sync local zettelkasten with git zettelkasten
   ui                Launch the zk-ui from github.com/AndrewCopeland/zk-ui
 END
@@ -523,6 +524,14 @@ function list_media() {
   set -e
 }
 
+function remove_media() {
+  search_fields="$1"
+  media_zettel=$(find_zettel "$search_fields" "yes" || exit)
+  rm -f "$ZETTELKASTEN_DIR/$media_zettel"
+  git_push "removing media zettel $media_zettel" "$media_zettel"
+  echo_green "removed media zettel $media_zettel"
+}
+
 function variables() {
   cat $HOME/.zettelkasten
 }
@@ -672,6 +681,10 @@ function main() {
 
     "list-media" | "lsm")
       list_media
+      ;;
+
+    "remove-media" | "rmm")
+      remove_media "$2"
       ;;
 
     "sync")
