@@ -29,6 +29,7 @@ Commands:
   t, tag            Search zettels for a specific tag
   s, search         Search for a sub string within all zettels
   ls, list          List all zettels
+  grep, g           List zettels and grep on search
   rm, remove        Remove a zettel
   ln, link          Link 2 zettels together
   rml, rm-link      Remove a link between 2 zettels
@@ -518,6 +519,11 @@ function list() {
   ls $ZETTELKASTEN_DIR | grep "^[^.]"
 }
 
+function list_grep() {
+  search_field="${1}"
+  list | grep "$search_field"
+}
+
 function list_media() {
   set +e
   find $ZETTELKASTEN_DIR -type f -exec basename {} \; | sort | grep "^\."
@@ -661,6 +667,10 @@ function main() {
     
     "list" | "ls")
       list
+      ;;
+
+    "grep" | "g")
+      list_grep "${2}"
       ;;
 
     "home")
