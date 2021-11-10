@@ -24,12 +24,13 @@ Commands:
   oe, open-emacs    Open an existing zettel in emacs
   oc, open-code     Open an existing zettel in Visual Studio Code
   ob, open-browser  Open an existing zettel in github using OS default browser
+  ol, open-link     Open the first URL inside of the zettel
   p, push           Push zettels to GitHub
   c, cat            Print an existing zettel to terminal
   t, tag            Search zettels for a specific tag
   s, search         Search for a sub string within all zettels
   ls, list          List all zettels
-  grep, g           List zettels and grep on search
+  g, grep           List zettels and grep on search
   rm, remove        Remove a zettel
   ln, link          Link 2 zettels together
   rml, rm-link      Remove a link between 2 zettels
@@ -342,6 +343,14 @@ function open_browser() {
   $ZETTELKASTEN_BROWSER_COMMAND "https://github.com/$github_endpoint/tree/master/$ZETTELKASTEN_GIT_DIR/$zettel"
 }
 
+function open_link() {
+  search_field="${1}"
+  zettel=$(find_zettel "${search_field}" || exit)
+  url=$(open_editor "cat" "${zettel}" | grep "https://")
+
+  $ZETTELKASTEN_BROWSER_COMMAND "${url}"
+}
+
 function push() {
     cwd=$(pwd)
     cd "$ZETTELKASTEN_DIR"
@@ -635,6 +644,10 @@ function main() {
 
     "open-browser" | "ob")
       open_browser "$2"
+      ;;
+
+    "open-link" | "ol")
+      open_link "${2}"
       ;;
 
     "push" | "p")
