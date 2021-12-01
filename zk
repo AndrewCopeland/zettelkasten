@@ -89,10 +89,27 @@ function find_zettel() {
   # validate search field were procided and create search fields for grep
   search_fields="$1"
   search_media="${2:-no}"
-  if [[ -z "$search_fields" ]];then
+  if [[ -z "$search_fields" ]]; then
     list_zettels
     fail "Could not find a zettel because search fields were not provided"
   fi
+
+  # if search fields starts with "^" then assume relative search
+  if [[ $search_fields == ^* ]]; then
+    # when '^' is provided then offset of '1' is assumed
+    # when '^2' is procided then offset is '2' same applies to 3, 4, etc
+    offset=$(echo "${search_fields: -1}")
+    if [ "$offset" == "^" ]; then
+      offset="1"
+    fi
+    zettel=$(ls $ZETTELKASTEN_DIR | tail -n "$offset" | head -n 1)
+    if [ "$zettel" == "" ]; then
+      fail "Could not find the previous zettel"
+    fi
+    echo "$zettel"
+    return
+  fi
+
   search_fields=$(echo "$search_fields" | sed 's/ /|/g' | sed 's/,/|/g')
 
   # look for the zettel
